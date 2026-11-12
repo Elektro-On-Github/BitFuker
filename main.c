@@ -5,14 +5,30 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
 
-void snowy(unsigned char *framebuffer, int dimFB, int width, int height) {
+void vline(unsigned char *framebuffer, int dimFB, int width) {
     int i, x;
     for (i = 0; i < dimFB; i = i + width * 3) {
         int randomnum = (rand() % width * 3);
-        for (x = 0; x < 200; x++) {
-        framebuffer[randomnum + i + x + 0] = rand() % 255 + 1;
-        framebuffer[randomnum + i + x + 1] = rand() % 255 + 1;
-        framebuffer[randomnum + i + x + 2] = rand() % 255 + 1;}
+        for (x = 0; x < width - 1; x++) {
+            framebuffer[randomnum + i + x + 0] = rand() % 255 + 1;
+            framebuffer[randomnum + i + x + 1] = rand() % 255 + 1;
+            framebuffer[randomnum + i + x + 2] = rand() % 255 + 1;
+        }
+    }
+}
+
+void xor(unsigned char *framebuffer, int dimFB) {
+    int i;
+    for (i = 0; i < dimFB; i++) {
+        framebuffer[i] = framebuffer[i] ^ 255; // ^ fa lo xor
+    }
+}
+
+void irdkfr(unsigned char *framebuffer, int dimFB, int width) {
+    int i, x;
+    for (i = 0; i < dimFB; i++) {
+        for (x = 0; x < width - 1; x++)
+        framebuffer[i] = framebuffer[i + x] - framebuffer[i];
     }
 }
 
@@ -33,8 +49,12 @@ int main() {
     //calcolo dimensione del framebuffer
     int dimFB = width * height * 3;
     printf("%d\n", dimFB);
-    snowy(framebuffer, dimFB, width, height);
     printf("%d", width);
+
+
+    //vline(framebuffer, dimFB, width);
+    //xor(framebuffer, dimFB);
+    irdkfr(framebuffer, dimFB, width);
 
     // inizializza SDL
     bool InitVal = SDL_Init(SDL_INIT_VIDEO);
@@ -73,6 +93,7 @@ int main() {
 
     SDL_Event event; // entry point per gli eventi di SDL
     // se l'entry point non dice di quittare si continua in loop a mostrare l'img
+
     while (SDL_WaitEvent(&event)) {
         if (event.type == SDL_EVENT_QUIT) {
             break;
