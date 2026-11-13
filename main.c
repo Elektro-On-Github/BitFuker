@@ -24,11 +24,26 @@ void xor(unsigned char *framebuffer, int dimFB) {
     }
 }
 
-void irdkfr(unsigned char *framebuffer, int dimFB, int width) {
+void saturate(unsigned char *framebuffer, int dimFB, int width) {
+    int i, x;
+    for (i = 0; i < dimFB; i++) {
+        framebuffer[i] = framebuffer[i] * 2;
+    }
+}
+
+void bug(unsigned char *framebuffer, int dimFB, int width) {
     int i, x;
     for (i = 0; i < dimFB; i++) {
         for (x = 0; x < width - 1; x++)
-        framebuffer[i] = framebuffer[i + x] - framebuffer[i];
+        framebuffer[i] = framebuffer[x*100] - framebuffer[i];
+    }
+}
+
+void pixel_shift(unsigned char *framebuffer, int dimFB) {
+    for (int i = 0; i < dimFB; i = i + 3) {
+        framebuffer[i + 10] = framebuffer[i + 20];
+        framebuffer[i + 20] = framebuffer[i + 40];
+        framebuffer[i + 40] = framebuffer[i + 80];
     }
 }
 
@@ -54,7 +69,9 @@ int main() {
 
     //vline(framebuffer, dimFB, width);
     //xor(framebuffer, dimFB);
-    irdkfr(framebuffer, dimFB, width);
+    //saturate(framebuffer, dimFB, width);
+    //bug(framebuffer, dimFB, width);
+    pixel_shift(framebuffer, dimFB);
 
     // inizializza SDL
     bool InitVal = SDL_Init(SDL_INIT_VIDEO);
