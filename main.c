@@ -123,7 +123,7 @@ int main() {
     //vline(framebuffer, dimFB, width);
     //xor(framebuffer, dimFB);
     //saturate(framebuffer, dimFB);
-    bug(framebuffer, dimFB, width);
+    //bug(framebuffer, dimFB, width);
     //nintendo3ds_fx(framebuffer, dimFB);
     //soft_ghostfx(framebuffer, dimFB);
     //hard_ghostfx(framebuffer, dimFB);
