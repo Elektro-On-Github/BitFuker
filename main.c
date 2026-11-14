@@ -35,7 +35,7 @@ void bug(unsigned char *framebuffer, int dimFB, int width) {
     int i, x;
     for (i = 0; i < dimFB; i++) {
         for (x = 0; x < width - 1; x++)
-        framebuffer[i] = framebuffer[x*100] - framebuffer[i];
+        framebuffer[i] = framebuffer[x*11] - framebuffer[i];
     }
 }
 
@@ -120,15 +120,15 @@ int main() {
     printf("%d", width);
 
 
-    vline(framebuffer, dimFB, width);
-    xor(framebuffer, dimFB);
-    saturate(framebuffer, dimFB);
+    //vline(framebuffer, dimFB, width);
+    //xor(framebuffer, dimFB);
+    //saturate(framebuffer, dimFB);
     bug(framebuffer, dimFB, width);
-    nintendo3ds_fx(framebuffer, dimFB);
-    soft_ghostfx(framebuffer, dimFB);
-    hard_ghostfx(framebuffer, dimFB);
-    granuly(framebuffer, dimFB);
-    blacknoise(framebuffer, dimFB);
+    //nintendo3ds_fx(framebuffer, dimFB);
+    //soft_ghostfx(framebuffer, dimFB);
+    //hard_ghostfx(framebuffer, dimFB);
+    //granuly(framebuffer, dimFB);
+    //blacknoise(framebuffer, dimFB);
     
     // inizializza SDL
     bool InitVal = SDL_Init(SDL_INIT_VIDEO);
