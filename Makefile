@@ -28,7 +28,7 @@ $(SDL3_LIBRARY): $(SDL3_CONFIG_STAMP)
 
 $(TARGET): main.c $(SDL3_LIBRARY)
 	mkdir -p "$(dir $@)"
-	$(CC) $(CPPFLAGS) $(CFLAGS) $< $(LDFLAGS) $(LDLIBS) -o $@
+	$(CC) $(CPPFLAGS) $(CFLAGS) main.c imgFX.c $(LDFLAGS) $(LDLIBS) -o $@
 
 clean:
 	rm -f "$(TARGET)"
