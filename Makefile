@@ -6,6 +6,9 @@ TARGET ?= build/framebuffer
 CPPFLAGS += -I$(SDL3_SOURCE_DIR)/include
 CFLAGS ?= -O2 -Wall -Wextra
 CFLAGS += -std=c11
+
+#CFLAGS += -Wall -Wextra -g -O1 -fsanitize=address -fno-omit-frame-pointer -std=c11
+
 LDFLAGS += -L$(SDL3_BUILD_DIR) -Wl,-rpath,'$$ORIGIN/sdl3'
 LDLIBS += -lSDL3 -lm
 
@@ -28,7 +31,7 @@ $(SDL3_LIBRARY): $(SDL3_CONFIG_STAMP)
 
 $(TARGET): main.c $(SDL3_LIBRARY)
 	mkdir -p "$(dir $@)"
-	$(CC) $(CPPFLAGS) $(CFLAGS) main.c imgFX.c $(LDFLAGS) $(LDLIBS) -o $@
+	$(CC) $(CPPFLAGS) $(CFLAGS) main.c imgFX.c help.c $(LDFLAGS) $(LDLIBS) -o $@
 
 clean:
 	rm -f "$(TARGET)"

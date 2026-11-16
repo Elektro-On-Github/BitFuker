@@ -4,10 +4,10 @@ void vline(unsigned char *framebuffer, int dimFB, int width) {
     int i, x;
     for (i = 0; i < dimFB; i = i + width * 3) {
         int randomnum = (rand() % width * 3);
-        for (x = 0; x < width - 1; x++) {
-            framebuffer[randomnum + i + x + 0] = rand() % 255 + 1;
-            framebuffer[randomnum + i + x + 1] = rand() % 255 + 1;
-            framebuffer[randomnum + i + x + 2] = rand() % 255 + 1;
+        for (x = 0; x < width - randomnum; x++) {
+            framebuffer[randomnum + i + x + 0] = rand() % 255;
+            framebuffer[randomnum + i + x + 1] = rand() % 255;
+            framebuffer[randomnum + i + x + 2] = rand() % 255;
         }
     }
 }
@@ -22,20 +22,20 @@ void xorfx(unsigned char *framebuffer, int dimFB) {
 void saturate(unsigned char *framebuffer, int dimFB) {
     int i;
     for (i = 0; i < dimFB; i++) {
-        framebuffer[i] = framebuffer[i] * 2;
+        framebuffer[i] = framebuffer[i] * 5 > 255 ? 255 : framebuffer[i] * 2;
     }
 }
 
 void bug(unsigned char *framebuffer, int dimFB, int width) {
     int i, x;
     for (i = 0; i < dimFB; i++) {
-        for (x = 0; x < width - 1; x++)
-        framebuffer[i] = framebuffer[x*100] - framebuffer[i];
+        for (x = 0; x < width; x+=1)
+        framebuffer[i] = framebuffer[x] - framebuffer[i];
     }
 }
 
 void nintendo3ds_fx(unsigned char *framebuffer, int dimFB) {
-    for (int i = 0; i < dimFB; i = i + 2) {
+    for (int i = 0; i < dimFB - 81; i = i + 2) {
         framebuffer[i + 10] = framebuffer[i + 20];
         framebuffer[i + 20] = framebuffer[i + 40];
         framebuffer[i + 40] = framebuffer[i + 80];
@@ -43,7 +43,7 @@ void nintendo3ds_fx(unsigned char *framebuffer, int dimFB) {
 }
 
 void soft_ghostfx(unsigned char *framebuffer, int dimFB) {
-    for (int i = 0; i < dimFB; i = i + 2) {
+    for (int i = 0; i < dimFB - 100; i = i + 2) {
         framebuffer[i + 1] = framebuffer[i + 10];
         framebuffer[i + 2] = framebuffer[i + 20];
         framebuffer[i + 3] = framebuffer[i + 30];
@@ -57,7 +57,7 @@ void soft_ghostfx(unsigned char *framebuffer, int dimFB) {
 }
 
 void hard_ghostfx(unsigned char *framebuffer, int dimFB) {
-    for (int i = 0; i < dimFB; i = i + 2) {
+    for (int i = 0; i < dimFB - 200; i = i + 2) {
         framebuffer[i + 2] = framebuffer[i + 20];
         framebuffer[i + 4] = framebuffer[i + 40];
         framebuffer[i + 6] = framebuffer[i + 60];
@@ -80,7 +80,7 @@ void hard_ghostfx(unsigned char *framebuffer, int dimFB) {
 }
 
 void granuly(unsigned char *framebuffer, int dimFB) {
-    for (int i = 0; i < dimFB; i = i + rand() % 23) {
+    for (int i = 0; i < dimFB - 4; i = i + rand() % 23) {
         framebuffer[i + 1] = rand() % 255;
         framebuffer[i + 2] = rand() % 255;
         framebuffer[i + 3] = rand() % 255;
@@ -88,7 +88,7 @@ void granuly(unsigned char *framebuffer, int dimFB) {
 }
 
 void blacknoise(unsigned char *framebuffer, int dimFB) {
-    for (int i = 0; i < dimFB; i = i + rand() % 13) {
+    for (int i = 0; i < dimFB - 4; i = i + rand() % 13) {
         framebuffer[i + 1] = 0;
         framebuffer[i + 2] = 0;
         framebuffer[i + 3] = 0;

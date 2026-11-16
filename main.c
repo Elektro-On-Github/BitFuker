@@ -2,14 +2,16 @@
 #include <SDL3/SDL.h>
 #include <time.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
 
 //h_filez
 #include "imgFX.h"
+#include "help.h"
 
-int main() {
+int main(int argc, char *argv[]) {
     srand(time(NULL));
     // vedi sempre qui se ti serve
     int width, height;
@@ -27,16 +29,19 @@ int main() {
     int dimFB = width * height * 3;
     printf("%d\n", dimFB);
     printf("%d", width);
-    
-    vline(framebuffer, dimFB, width);
-    xorfx(framebuffer, dimFB);
-    saturate(framebuffer, dimFB);
-    bug(framebuffer, dimFB, width);
-    nintendo3ds_fx(framebuffer, dimFB);
-    soft_ghostfx(framebuffer, dimFB);
-    hard_ghostfx(framebuffer, dimFB);
-    granuly(framebuffer, dimFB);
-    blacknoise(framebuffer, dimFB);
+
+    //param
+    if (argc < 2) {help();}
+    if (strcmp(argv[1], "--vertical-line") == 0) {vline(framebuffer, dimFB, width);}
+    if (strcmp(argv[1], "--xor") == 0) {xorfx(framebuffer, dimFB);}
+    if (strcmp(argv[1], "--saturate") == 0) {saturate(framebuffer, dimFB);}
+    if (strcmp(argv[1], "--bug") == 0) {bug(framebuffer, dimFB, width);}
+    if (strcmp(argv[1], "--nintendo-3ds") == 0) {nintendo3ds_fx(framebuffer, dimFB);}
+    if (strcmp(argv[1], "--soft-ghost") == 0) {soft_ghostfx(framebuffer, dimFB);}
+    if (strcmp(argv[1], "--hard-ghost") == 0) {hard_ghostfx(framebuffer, dimFB);}
+    if (strcmp(argv[1], "--granuly") == 0) {granuly(framebuffer, dimFB);}
+    if (strcmp(argv[1], "--blacknoise") == 0) {blacknoise(framebuffer, dimFB);}
+    if (strcmp(argv[1], "--help") == 0) {help();}
 
     // inizializza SDL
     bool InitVal = SDL_Init(SDL_INIT_VIDEO);
