@@ -27,8 +27,7 @@ int main() {
     int dimFB = width * height * 3;
     printf("%d\n", dimFB);
     printf("%d", width);
-
-
+    
     vline(framebuffer, dimFB, width);
     xorfx(framebuffer, dimFB);
     saturate(framebuffer, dimFB);
@@ -38,7 +37,7 @@ int main() {
     hard_ghostfx(framebuffer, dimFB);
     granuly(framebuffer, dimFB);
     blacknoise(framebuffer, dimFB);
-    
+
     // inizializza SDL
     bool InitVal = SDL_Init(SDL_INIT_VIDEO);
 
