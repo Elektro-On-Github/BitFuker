@@ -48,6 +48,7 @@ int main(int argc, char *argv[]) {
     else if (strcmp(argv[2], "--hard-ghost") == 0) {hard_ghostfx(framebuffer, dimFB);}
     else if (strcmp(argv[2], "--granuly") == 0) {granuly(framebuffer, dimFB);}
     else if (strcmp(argv[2], "--blacknoise") == 0) {blacknoise(framebuffer, dimFB);}
+    else if (strcmp(argv[2], "--huge-distortion") == 0) {hugedistortion(framebuffer, dimFB);}
     else {help();}
 
     // inizializza SDL

@@ -34,6 +34,14 @@ void bug(unsigned char *framebuffer, int dimFB, int width) {
     }
 }
 
+void hugedistortion(unsigned char *framebuffer, int dimFB) {
+    int i;
+    int kounter = 1;
+    for (i = 0; i < (dimFB - (kounter + 1)); i++) {
+        framebuffer[i] = framebuffer[i+kounter] - framebuffer[i];
+    }
+}
+
 void nintendo3ds_fx(unsigned char *framebuffer, int dimFB) {
     for (int i = 0; i < dimFB - 81; i = i + 2) {
         framebuffer[i + 10] = framebuffer[i + 20];
@@ -80,7 +88,7 @@ void hard_ghostfx(unsigned char *framebuffer, int dimFB) {
 }
 
 void granuly(unsigned char *framebuffer, int dimFB) {
-    for (int i = 0; i < dimFB - 4; i = i + rand() % 23) {
+    for (int i = 0; i < dimFB - 4; i = i + rand() % 46 + 1) {
         framebuffer[i + 1] = rand() % 255;
         framebuffer[i + 2] = rand() % 255;
         framebuffer[i + 3] = rand() % 255;
@@ -88,7 +96,7 @@ void granuly(unsigned char *framebuffer, int dimFB) {
 }
 
 void blacknoise(unsigned char *framebuffer, int dimFB) {
-    for (int i = 0; i < dimFB - 4; i = i + rand() % 13) {
+    for (int i = 0; i < dimFB - 4; i = i + rand() % 12 + 1) {
         framebuffer[i + 1] = 0;
         framebuffer[i + 2] = 0;
         framebuffer[i + 3] = 0;

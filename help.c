@@ -13,5 +13,6 @@ void help() {
     printf("  --hard-ghost        Ghosting (hard)\n");
     printf("  --granuly           Applica un effetto granulare\n");
     printf("  --blacknoise        Rumore nero\n");
+    printf("  --huge-distortion   Distorsione gigantesca");
     exit(EXIT_SUCCESS);
 }
