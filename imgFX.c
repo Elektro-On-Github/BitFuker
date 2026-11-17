@@ -29,7 +29,7 @@ void saturate(unsigned char *framebuffer, int dimFB) {
 void bug(unsigned char *framebuffer, int dimFB, int width) {
     int i, x;
     for (i = 0; i < dimFB; i++) {
-        for (x = 0; x < width; x+=1)
+        for (x = 0; x < width; x+=4)
         framebuffer[i] = framebuffer[x] - framebuffer[i];
     }
 }
