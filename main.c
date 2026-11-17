@@ -11,16 +11,22 @@
 #include "imgFX.h"
 #include "help.h"
 
+// argc = argument count
+// argv = argument vector (argomenti passati al programma sotto forma di array di stringhe)
 int main(int argc, char *argv[]) {
     srand(time(NULL));
     // vedi sempre qui se ti serve
     int width, height;
 
+    // param di base
+    char *IMGPath = argv[1];
+    if (strcmp(argv[1], "--help") == 0) {help();} //check se argv[1] == "--help"
+
     // crea un framebuffer che contiene i pixel raw di input.png
     // framebuffer è un pointer che contiene l'indirizzo di mem di inizio degli unsigned_char di 8 bit fino a 255 in dec
     // &width e &height sono dei refer alle variabili.
     // stbi_load("roba.png", address_of_width, address_of_height, numero_canali_esistenti, canali_in_out); usage:
-    unsigned char *framebuffer = stbi_load("input.jpg", &width, &height, NULL, 3);
+    unsigned char *framebuffer = stbi_load(IMGPath, &width, &height, NULL, 3);
     
     //piccolo check al framebuffer per vedere se e' un pointer null
     if (!framebuffer) {return 1;}
@@ -31,17 +37,16 @@ int main(int argc, char *argv[]) {
     printf("%d", width);
 
     //param
-    if (argc < 2) {help();}
-    if (strcmp(argv[1], "--vertical-line") == 0) {vline(framebuffer, dimFB, width);}
-    if (strcmp(argv[1], "--xor") == 0) {xorfx(framebuffer, dimFB);}
-    if (strcmp(argv[1], "--saturate") == 0) {saturate(framebuffer, dimFB);}
-    if (strcmp(argv[1], "--bug") == 0) {bug(framebuffer, dimFB, width);}
-    if (strcmp(argv[1], "--nintendo-3ds") == 0) {nintendo3ds_fx(framebuffer, dimFB);}
-    if (strcmp(argv[1], "--soft-ghost") == 0) {soft_ghostfx(framebuffer, dimFB);}
-    if (strcmp(argv[1], "--hard-ghost") == 0) {hard_ghostfx(framebuffer, dimFB);}
-    if (strcmp(argv[1], "--granuly") == 0) {granuly(framebuffer, dimFB);}
-    if (strcmp(argv[1], "--blacknoise") == 0) {blacknoise(framebuffer, dimFB);}
-    if (strcmp(argv[1], "--help") == 0) {help();}
+    if (argc < 3) {help();}
+    if (strcmp(argv[2], "--vertical-line") == 0) {vline(framebuffer, dimFB, width);}
+    if (strcmp(argv[2], "--xor") == 0) {xorfx(framebuffer, dimFB);}
+    if (strcmp(argv[2], "--saturate") == 0) {saturate(framebuffer, dimFB);}
+    if (strcmp(argv[2], "--bug") == 0) {bug(framebuffer, dimFB, width);}
+    if (strcmp(argv[2], "--nintendo-3ds") == 0) {nintendo3ds_fx(framebuffer, dimFB);}
+    if (strcmp(argv[2], "--soft-ghost") == 0) {soft_ghostfx(framebuffer, dimFB);}
+    if (strcmp(argv[2], "--hard-ghost") == 0) {hard_ghostfx(framebuffer, dimFB);}
+    if (strcmp(argv[2], "--granuly") == 0) {granuly(framebuffer, dimFB);}
+    if (strcmp(argv[2], "--blacknoise") == 0) {blacknoise(framebuffer, dimFB);}
 
     // inizializza SDL
     bool InitVal = SDL_Init(SDL_INIT_VIDEO);
