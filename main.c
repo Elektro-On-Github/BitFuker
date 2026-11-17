@@ -37,7 +37,8 @@ int main(int argc, char *argv[]) {
     printf("%d", width);
 
     //param
-    if (argc < 2) {help();}
+    if (argc > 3) {help();}
+    if (argv[2] == NULL) {help();} // se argv[2] == NULL il programma fa seg fault bcz of strcmp. Cosi evitiamo il crash
     if (strcmp(argv[2], "--vertical-line") == 0) {vline(framebuffer, dimFB, width);}
     if (strcmp(argv[2], "--xor") == 0) {xorfx(framebuffer, dimFB);}
     if (strcmp(argv[2], "--saturate") == 0) {saturate(framebuffer, dimFB);}
