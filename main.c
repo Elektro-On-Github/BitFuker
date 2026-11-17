@@ -19,8 +19,8 @@ int main(int argc, char *argv[]) {
     int width, height;
 
     // param di base
-    char *IMGPath = argv[1];
     if (strcmp(argv[1], "--help") == 0) {help();} //check se argv[1] == "--help"
+    char *IMGPath = argv[1];
 
     // crea un framebuffer che contiene i pixel raw di input.png
     // framebuffer è un pointer che contiene l'indirizzo di mem di inizio degli unsigned_char di 8 bit fino a 255 in dec
@@ -37,7 +37,7 @@ int main(int argc, char *argv[]) {
     printf("%d", width);
 
     //param
-    if (argc < 3) {help();}
+    if (argc < 2) {help();}
     if (strcmp(argv[2], "--vertical-line") == 0) {vline(framebuffer, dimFB, width);}
     if (strcmp(argv[2], "--xor") == 0) {xorfx(framebuffer, dimFB);}
     if (strcmp(argv[2], "--saturate") == 0) {saturate(framebuffer, dimFB);}
