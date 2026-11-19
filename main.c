@@ -11,46 +11,8 @@
 #include "imgFX.h"
 #include "help.h"
 
-// argc = argument count
-// argv = argument vector (argomenti passati al programma sotto forma di array di stringhe)
-int main(int argc, char *argv[]) {
-    srand(time(NULL));
-    // vedi sempre qui se ti serve
-    int width, height;
-
-    // param di base
-    if (strcmp(argv[1], "--help") == 0) {help();} //check se argv[1] == "--help"
-    char *IMGPath = argv[1];
-
-    // crea un framebuffer che contiene i pixel raw di input.png
-    // framebuffer è un pointer che contiene l'indirizzo di mem di inizio degli unsigned_char di 8 bit fino a 255 in dec
-    // &width e &height sono dei refer alle variabili.
-    // stbi_load("roba.png", address_of_width, address_of_height, numero_canali_esistenti, canali_in_out); usage:
-    unsigned char *framebuffer = stbi_load(IMGPath, &width, &height, NULL, 3);
-    
-    //piccolo check al framebuffer per vedere se e' un pointer null
-    if (!framebuffer) {return 1;}
-
-    //calcolo dimensione del framebuffer
-    int dimFB = width * height * 3;
-    //printf("%d\n", dimFB);
-    //printf("%d", width);
-
-    //param
-    if (argc > 3) {help();}
-    if (argv[2] == NULL) {help();} // se argv[2] == NULL il programma fa seg fault bcz of strcmp. Cosi evitiamo il crash
-    else if (strcmp(argv[2], "--vertical-line") == 0) {vline(framebuffer, dimFB, width);}
-    else if (strcmp(argv[2], "--xor") == 0) {xorfx(framebuffer, dimFB);}
-    else if (strcmp(argv[2], "--saturate") == 0) {saturate(framebuffer, dimFB);}
-    else if (strcmp(argv[2], "--bug") == 0) {bug(framebuffer, dimFB, width);}
-    else if (strcmp(argv[2], "--nintendo-3ds") == 0) {nintendo3ds_fx(framebuffer, dimFB);}
-    else if (strcmp(argv[2], "--soft-ghost") == 0) {soft_ghostfx(framebuffer, dimFB);}
-    else if (strcmp(argv[2], "--hard-ghost") == 0) {hard_ghostfx(framebuffer, dimFB);}
-    else if (strcmp(argv[2], "--granuly") == 0) {granuly(framebuffer, dimFB);}
-    else if (strcmp(argv[2], "--blacknoise") == 0) {blacknoise(framebuffer, dimFB);}
-    else if (strcmp(argv[2], "--huge-distortion") == 0) {hugedistortion(framebuffer, dimFB);}
-    else {help();}
-
+//SDL stuff per visualizzare l'immagine
+int SDLStuff(unsigned char *framebuffer, int height, int width) {
     // inizializza SDL
     bool InitVal = SDL_Init(SDL_INIT_VIDEO);
 
@@ -100,4 +62,47 @@ int main(int argc, char *argv[]) {
     SDL_Quit();
     stbi_image_free(framebuffer);
     return 0;
+}
+
+// argc = argument count
+// argv = argument vector (argomenti passati al programma sotto forma di array di stringhe)
+int main(int argc, char *argv[]) {
+    srand(time(NULL));
+    // vedi sempre qui se ti serve
+    int width, height;
+
+    // param di base
+    if (strcmp(argv[1], "--help") == 0) {help();} //check se argv[1] == "--help"
+    char *IMGPath = argv[1];
+
+    // crea un framebuffer che contiene i pixel raw di input.png
+    // framebuffer è un pointer che contiene l'indirizzo di mem di inizio degli unsigned_char di 8 bit fino a 255 in dec
+    // &width e &height sono dei refer alle variabili.
+    // stbi_load("roba.png", address_of_width, address_of_height, numero_canali_esistenti, canali_in_out); usage:
+    unsigned char *framebuffer = stbi_load(IMGPath, &width, &height, NULL, 3);
+    
+    //piccolo check al framebuffer per vedere se e' un pointer null
+    if (!framebuffer) {return 1;}
+
+    //calcolo dimensione del framebuffer
+    int dimFB = width * height * 3;
+    //printf("%d\n", dimFB);
+    //printf("%d", width);
+
+    //param
+    if (argc > 3) {help();}
+    if (argv[2] == NULL) {help();} // se argv[2] == NULL il programma fa seg fault bcz of strcmp. Cosi evitiamo il crash
+    else if (strcmp(argv[2], "--vertical-line") == 0) {vline(framebuffer, dimFB, width);}
+    else if (strcmp(argv[2], "--xor") == 0) {xorfx(framebuffer, dimFB);}
+    else if (strcmp(argv[2], "--saturate") == 0) {saturate(framebuffer, dimFB);}
+    else if (strcmp(argv[2], "--bug") == 0) {bug(framebuffer, dimFB, width);}
+    else if (strcmp(argv[2], "--nintendo-3ds") == 0) {nintendo3ds_fx(framebuffer, dimFB);}
+    else if (strcmp(argv[2], "--soft-ghost") == 0) {soft_ghostfx(framebuffer, dimFB);}
+    else if (strcmp(argv[2], "--hard-ghost") == 0) {hard_ghostfx(framebuffer, dimFB);}
+    else if (strcmp(argv[2], "--granuly") == 0) {granuly(framebuffer, dimFB);}
+    else if (strcmp(argv[2], "--blacknoise") == 0) {blacknoise(framebuffer, dimFB);}
+    else if (strcmp(argv[2], "--huge-distortion") == 0) {hugedistortion(framebuffer, dimFB);}
+    else {help();}
+
+    SDLStuff(framebuffer, height, width);
 }
