@@ -11,7 +11,7 @@
 #include "imgFX.h"
 #include "help.h"
 
-//SDL stuff per visualizzare l'immagine
+//SDL stuff solo per immagini
 int SDLStuff(unsigned char *framebuffer, int height, int width) {
     // inizializza SDL
     bool InitVal = SDL_Init(SDL_INIT_VIDEO);
