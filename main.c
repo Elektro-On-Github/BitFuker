@@ -19,8 +19,7 @@ int main(int argc, char *argv[]) {
     int width, height;
 
     // param di base
-    if (argc < 2) {help();} //para culo cosi a strcmp non arrivera' mai NULL se ci son meno di 2 param
-    if (strcmp(argv[1], "--help") == 0) {help();} //check se argv[1] == "--help"
+    if (argc < 3) {help();} // campo ristretto per i param. avoidiamo roba indefinita
     char *IMGPath = argv[1];
 
     // crea un framebuffer che contiene i pixel raw di input.png
