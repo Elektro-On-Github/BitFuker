@@ -14,5 +14,6 @@ void help() {
     printf("  --granuly           Applica un effetto granulare\n");
     printf("  --blacknoise        Rumore nero\n");
     printf("  --huge-distortion   Distorsione gigantesca");
+    printf("\n");
     exit(EXIT_SUCCESS);
 }

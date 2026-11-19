@@ -5,7 +5,7 @@ TARGET ?= build/framebuffer
 
 CPPFLAGS += -I$(SDL3_SOURCE_DIR)/include
 CFLAGS ?= -O3 -Wall -Wextra
-CFLAGS += -std=c11
+CFLAGS += -std=c23
 
 #CFLAGS += -Wall -Wextra -g -O1 -fsanitize=address -fno-omit-frame-pointer -std=c11
 

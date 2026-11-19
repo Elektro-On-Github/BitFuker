@@ -22,14 +22,15 @@ void xorfx(unsigned char *framebuffer, int dimFB) {
 void saturate(unsigned char *framebuffer, int dimFB) {
     int i;
     for (i = 0; i < dimFB; i++) {
-        framebuffer[i] = framebuffer[i] * 5 > 255 ? 255 : framebuffer[i] * 2;
+        if (framebuffer[i] * 5 > 255) {framebuffer[i] = 255;} // se supera il 255 con la molt * 5 moltiplica per 2
+        else {framebuffer[i] = framebuffer[i] * 2;}
     }
 }
 
-void bug(unsigned char *framebuffer, int dimFB, int width) {
+void bug(unsigned char *framebuffer, int dimFB) {
     int i, x;
     for (i = 0; i < dimFB; i++) {
-        for (x = 0; x < width; x+=4)
+        x = i * 0.001;
         framebuffer[i] = framebuffer[x] - framebuffer[i];
     }
 }
