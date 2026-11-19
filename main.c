@@ -37,17 +37,16 @@ int main(int argc, char *argv[]) {
     //printf("%d", width);
 
     //param
-    if (argv[2] == NULL) {help();} // se argv[2] == NULL il programma fa seg fault bcz of strcmp. Cosi evitiamo il crash
-    else if (strcmp(argv[2], "--vertical-line") == 0) {vline(framebuffer, dimFB, width);}
-    else if (strcmp(argv[2], "--xor") == 0) {xorfx(framebuffer, dimFB);}
-    else if (strcmp(argv[2], "--saturate") == 0) {saturate(framebuffer, dimFB);}
-    else if (strcmp(argv[2], "--bug") == 0) {bug(framebuffer, dimFB);}
-    else if (strcmp(argv[2], "--nintendo-3ds") == 0) {nintendo3ds_fx(framebuffer, dimFB);}
-    else if (strcmp(argv[2], "--soft-ghost") == 0) {soft_ghostfx(framebuffer, dimFB);}
-    else if (strcmp(argv[2], "--hard-ghost") == 0) {hard_ghostfx(framebuffer, dimFB);}
-    else if (strcmp(argv[2], "--granuly") == 0) {granuly(framebuffer, dimFB);}
-    else if (strcmp(argv[2], "--blacknoise") == 0) {blacknoise(framebuffer, dimFB);}
-    else if (strcmp(argv[2], "--huge-distortion") == 0) {hugedistortion(framebuffer, dimFB);}
+    if (strcmp(argv[2], "--vertical-line") == 0) {vline(framebuffer, dimFB, width);}
+    if (strcmp(argv[2], "--xor") == 0) {xorfx(framebuffer, dimFB);}
+    if (strcmp(argv[2], "--saturate") == 0) {saturate(framebuffer, dimFB);}
+    if (strcmp(argv[2], "--bug") == 0) {bug(framebuffer, dimFB);}
+    if (strcmp(argv[2], "--nintendo-3ds") == 0) {nintendo3ds_fx(framebuffer, dimFB);}
+    if (strcmp(argv[2], "--soft-ghost") == 0) {soft_ghostfx(framebuffer, dimFB);}
+    if (strcmp(argv[2], "--hard-ghost") == 0) {hard_ghostfx(framebuffer, dimFB);}
+    if (strcmp(argv[2], "--granuly") == 0) {granuly(framebuffer, dimFB);}
+    if (strcmp(argv[2], "--blacknoise") == 0) {blacknoise(framebuffer, dimFB);}
+    if (strcmp(argv[2], "--huge-distortion") == 0) {hugedistortion(framebuffer, dimFB);}
     else {help();}
 
     SDLimg(framebuffer, height, width);
