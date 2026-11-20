@@ -20,11 +20,11 @@
 #include <libswscale/swscale.h>
 // può fare conversione di pixel (tipo da NV12 a RGB24) e resizing (anche color space conversion e altro)
 
-int SDLvideo_main(const char *source) {
+/* int SDLvideo_main() {
     //printf("libavformat: %u\n", avformat_version()); 
     //printf("libavcodec: %u\n", avcodec_version());
     //printf("libavutil: %u\n", avutil_version());
     //printf("libswscale: %u\n", swscale_version());
 
     return 0;
-}
+} */

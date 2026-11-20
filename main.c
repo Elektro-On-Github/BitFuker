@@ -7,8 +7,8 @@
 #include <stb/stb_image.h>
 
 //h_filez
-#include "imgFX.h"
-#include "help.h"
+#include "FXs/imgFX.h"
+#include "help/help.h"
 #include "SDLimg.h"
 #include "SDLvideo.h"
 

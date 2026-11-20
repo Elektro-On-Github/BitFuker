@@ -33,7 +33,7 @@ $(SDL3_LIBRARY): $(SDL3_CONFIG_STAMP)
 
 $(TARGET): main.c $(SDL3_LIBRARY)
 	mkdir -p "$(dir $@)"
-	$(CC) $(CPPFLAGS) $(CFLAGS) main.c imgFX.c help.c SDLimg.c SDLvideo.c $(LDFLAGS) $(LDLIBS) -o $@
+	$(CC) $(CPPFLAGS) $(CFLAGS) main.c FXs/imgFX.c help/help.c SDLimg.c SDLvideo.c $(LDFLAGS) $(LDLIBS) -o $@
 
 clean:
 	rm -f "$(TARGET)"
