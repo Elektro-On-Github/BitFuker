@@ -7,6 +7,7 @@ CPPFLAGS += -I$(SDL3_SOURCE_DIR)/include
 CFLAGS ?= -O3 -Wall -Wextra
 CFLAGS += -std=c23
 
+# sanitizer for debugging and mem leaks
 #CFLAGS += -Wall -Wextra -g -O1 -fsanitize=address -fno-omit-frame-pointer -std=c11
 
 LDFLAGS += -L$(SDL3_BUILD_DIR) -Wl,-rpath,'$$ORIGIN/sdl3'
