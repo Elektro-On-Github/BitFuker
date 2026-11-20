@@ -20,7 +20,7 @@
 #include <libswscale/swscale.h>
 // può fare conversione di pixel (tipo da NV12 a RGB24) e resizing (anche color space conversion e altro)
 
-int main(void) {
+int SDLvideo_main(void) {
 
     printf("FFmpeg integration OK!\n");
 

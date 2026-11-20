@@ -11,6 +11,7 @@ CFLAGS += -std=c23
 
 LDFLAGS += -L$(SDL3_BUILD_DIR) -Wl,-rpath,'$$ORIGIN/sdl3'
 LDLIBS += -lSDL3 -lm
+LDLIBS += -lavformat -lavcodec -lavutil -lswscale
 
 SDL3_LIBRARY := $(SDL3_BUILD_DIR)/libSDL3.so
 SDL3_CONFIG_STAMP := $(SDL3_BUILD_DIR)/.configured
@@ -31,7 +32,7 @@ $(SDL3_LIBRARY): $(SDL3_CONFIG_STAMP)
 
 $(TARGET): main.c $(SDL3_LIBRARY)
 	mkdir -p "$(dir $@)"
-	$(CC) $(CPPFLAGS) $(CFLAGS) main.c imgFX.c help.c SDLimg.c $(LDFLAGS) $(LDLIBS) -o $@
+	$(CC) $(CPPFLAGS) $(CFLAGS) main.c imgFX.c help.c SDLimg.c SDLvideo.c $(LDFLAGS) $(LDLIBS) -o $@
 
 clean:
 	rm -f "$(TARGET)"
