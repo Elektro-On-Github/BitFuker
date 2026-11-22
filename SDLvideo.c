@@ -15,7 +15,7 @@
 // fa il decode dei codec (like: h264, h265, vp9, av1, mpeg2 ecc...)
 
 #include <libavutil/avutil.h>
-// gestione mem & errori, math, timestamp e altre cose niose
+// gestione mem & errori, math, timestamp e altre cose noiose
 
 #include <libswscale/swscale.h>
 // può fare conversione di pixel (tipo da NV12 a RGB24) e resizing (anche color space conversion e altro)
