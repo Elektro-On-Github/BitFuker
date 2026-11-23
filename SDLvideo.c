@@ -91,6 +91,49 @@ int SDLvideo_main(const char *source) {
         return 1;
     }
 
+    // copia i param del file / flusso al e li passa al decoder (fondamentale per la decodifica, quindi per visualizzare roba a schermo)
+    int fordecodestuff = avcodec_parameters_to_context(codec_ctx, format_ctx->streams[video_stream_index]->codecpar); 
+
+    if (fordecodestuff < 0) {
+        fprintf(stderr, "Cannot copy codec parameters.\n");
+        avcodec_free_context(&codec_ctx); // male che va killa AVCodecContext
+        avformat_close_input(&format_ctx); // close input
+        return 1;
+    }
+
+    // qui apriamo il decoder del codec rilevato
+    fordecodestuff = avcodec_open2(codec_ctx, codec, NULL);
+
+    if (fordecodestuff < 0) { // stessa roba di prima
+        fprintf(stderr, "Cannot open decoder.\n");
+        avcodec_free_context(&codec_ctx);
+        avformat_close_input(&format_ctx);
+        return 1;
+    }
+
+    // pacchetti, pezzi di dati compressi misteriosi che contengono i frame compressi del video. tipo h264, h265 ecc...
+    AVPacket *packet = av_packet_alloc();
+
+    if (packet == NULL) { // come a prima
+        fprintf(stderr, "Cannot allocate packet.\n");
+        avcodec_free_context(&codec_ctx);
+        avformat_close_input(&format_ctx);
+        return 1;
+    }
+
+    // alloca e inizializza la struct che conterrà i frame decodificati e decompressi (tipo RGB24, YUV ecc...)
+    // qui ci sta la roba raw
+    AVFrame *frame = av_frame_alloc();
+
+    // solito check come quelli di prima
+    if (frame == NULL) {
+        fprintf(stderr, "Cannot allocate frame.\n");
+        av_packet_free(&packet);
+        avcodec_free_context(&codec_ctx);
+        avformat_close_input(&format_ctx);
+        return 1;
+    }
+
     printf("Source: %s\n", source); // stampa source
 
     // meaning di ->: accedi a un membro di una struct tramite un puntatore.
