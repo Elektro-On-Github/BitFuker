@@ -20,7 +20,11 @@
 #include <libswscale/swscale.h>
 // può fare conversione di pixel (tipo da NV12 a RGB24) e resizing (anche color space conversion e altro)
 
+#include <libavutil/error.h>
+// gestione errori, da codice numerico a stringa di errore
+
 int SDLvideo_main(const char *source) {
+    if (source == NULL) {printf("No source specified.\n"); return 1;} // se non c'è sorgente, bang
 
     AVFormatContext *format_ctx = NULL; // AVFormatContext = Tipo struttura di ffmpeg. scheda tecnica del file multimediale
 
@@ -31,7 +35,7 @@ int SDLvideo_main(const char *source) {
     if (avopen < 0) { // se ci sono errori
         char errbuf[AV_ERROR_MAX_STRING_SIZE]; // dimensione datat da fmmpeg che dichiara la lunghezza del msg di errore
         av_strerror(avopen, errbuf, sizeof(errbuf)); // da codice errore (ex: -2) a text (ex: file not found)
-        printf("BitFuker: %s\n", errbuf); // stampa errore
+        fprintf(stderr, "BitFuker: %s\n", errbuf); // stampa errore
         return 1; // bang
     }
 
@@ -47,6 +51,22 @@ int SDLvideo_main(const char *source) {
 
         avformat_close_input(&format_ctx); // chiudi struttura e killa il video
         return 1;
+    }
+
+    int video_stream_index = -1; // -1 = non trovato
+    // unsigned int = int senza segno
+    for (unsigned int i = 0; i < format_ctx->nb_streams; i++) { // ciclo che si ferma quando i è uguale al numero di stream presenti nel file
+        AVStream *stream = format_ctx->streams[i];  // numero di stream (vid, audio, subtitle ecc...) e lo mettiamo in stream
+
+        if (stream->codecpar->codec_type == AVMEDIA_TYPE_VIDEO) { // verifica se il tipo di codec è video (AVMEDIA_TYPE_VIDEO = 0)
+            video_stream_index = i;
+            printf("Video stream found! Index: %u\n", i);
+            break;
+        }
+
+        if (video_stream_index == -1) {printf("No video stream found in the source.\n"); avformat_close_input(&format_ctx); return 1;} // stream error
+
+        else {printf("Stream %u is not a video stream.\n", i);}
     }
 
     printf("Source: %s\n", source); // stampa source

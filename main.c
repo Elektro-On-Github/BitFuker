@@ -20,7 +20,7 @@ int main(int argc, char *argv[]) {
     int width, height;
 
     // param di base
-    if (argc < 3) {help();} // campo ristretto per i param. avoidiamo roba indefinita
+    if (argc < 3) {help();return 0;} // campo ristretto per i param. avoidiamo roba indefinita
     char *IMGPath = argv[1];
 
     // crea un framebuffer che contiene i pixel raw di input.png
