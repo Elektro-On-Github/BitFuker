@@ -64,10 +64,10 @@ int SDLvideo_main(const char *source) {
             break;
         }
 
-        if (video_stream_index == -1) {printf("No video stream found in the source.\n"); avformat_close_input(&format_ctx); return 1;} // stream error
-
         else {printf("Stream %u is not a video stream.\n", i);}
     }
+
+    if (video_stream_index == -1) {printf("No video stream found in the source.\n"); avformat_close_input(&format_ctx); return 1;} // stream error
 
     printf("Source: %s\n", source); // stampa source
 
