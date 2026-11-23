@@ -81,6 +81,16 @@ int SDLvideo_main(const char *source) {
         return 1;
     }
 
+    // struct che contiene robe  di stato sui video
+    // la struct contiene il bitrate, e robe dinamiche che sa solo ffmpeg, non ci ho capito molto
+    AVCodecContext *codec_ctx = avcodec_alloc_context3(codec);
+
+    if (codec_ctx == NULL) { // check
+        fprintf(stderr, "Cannot allocate decoder context.\n");
+        avformat_close_input(&format_ctx);
+        return 1;
+    }
+
     printf("Source: %s\n", source); // stampa source
 
     // meaning di ->: accedi a un membro di una struct tramite un puntatore.
