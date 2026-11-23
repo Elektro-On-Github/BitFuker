@@ -67,7 +67,19 @@ int SDLvideo_main(const char *source) {
         else {printf("Stream %u is not a video stream.\n", i);}
     }
 
-    if (video_stream_index == -1) {printf("No video stream found in the source.\n"); avformat_close_input(&format_ctx); return 1;} // stream error
+    if (video_stream_index == -1) {
+        printf("No video stream found in the source.\n"); 
+        avformat_close_input(&format_ctx); 
+        return 1;
+    } // stream error
+
+    const AVCodec *codec = avcodec_find_decoder(format_ctx->streams[video_stream_index]->codecpar->codec_id); // capisce il codec e poi lo usa per decodificare il video. codecpar->codec_id = tipo di codec (h264, h265 ecc...)
+
+    if (codec == NULL) { // se non trova il decoder droppa errore
+        fprintf(stderr, "Decoder not found.\n");
+        avformat_close_input(&format_ctx);
+        return 1;
+    }
 
     printf("Source: %s\n", source); // stampa source
 
