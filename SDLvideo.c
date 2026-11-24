@@ -161,13 +161,23 @@ int SDLvideo_main(const char *source) {
     }
 
     // unsigned da 0 a 255 con un puntatore (dst_data), crea un array di 4 pointerz, tutti con un init a NULL
-    // 4 pointer pe 4 strati diversi (Ma RGB ne ha solo 1)
+    // 4 pointer pe 4 framebuffer diversi (Ma RGB ne ha solo 1)
     uint8_t *dst_data[4] = {0};
 
-    // 4 interi ovvero quanti byte occupa una riga dell'immagine in memoria
+    // ogni elemento contiene lo stride di un piano
+    // la distanza di byte tra l'inizio di una riga e l'inizio della successiva
+    // RGB24 usa solo un piano
     int dst_linesize[4] = {0};
 
+    // av_image_fill_arrays(dove ffmpeg scrive gli indirizzi dei piani, dove scrive gli stride, buffer RGB, specifica formato RGB,larghezza, altezza, allineamento byte)
+    // non ho ben capito cosa e' l'allineamento ma so che deve stare a 1
     av_image_fill_arrays(dst_data, dst_linesize, rgb_video_buffer, AV_PIX_FMT_RGB24, width, height, 1);
+
+    // prepara convertitore ffmpeg fa boh a rgb24
+    // SwsContext tipo di struttura di ffmpeg
+    // l'indirizzo contiene il return della func sws_getContext()
+    // sws_getContext(width_originale, height_originale, codec_ctx->pix_fmt_formato_px_originale, width_destinazione, height_destinazione, AV_PIX_FMT_RGB24_formato_destinazione, SWS_BILINEAR_calcola_scaling_pulito, NULL_filtri_custom_w, NULL_filtri_custom_h, NULL_roba_plus_conversione);
+    struct SwsContext *sws_ctx = sws_getContext(width, height, codec_ctx->pix_fmt, width, height, AV_PIX_FMT_RGB24, SWS_BILINEAR, NULL, NULL, NULL);
 
     // pacchetti, pezzi di dati compressi misteriosi che contengono i frame compressi del video. tipo h264, h265 ecc...
     AVPacket *packet = av_packet_alloc();
