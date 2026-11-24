@@ -160,6 +160,15 @@ int SDLvideo_main(const char *source) {
         return 1;
     }
 
+    // unsigned da 0 a 255 con un puntatore (dst_data), crea un array di 4 pointerz, tutti con un init a NULL
+    // 4 pointer pe 4 strati diversi (Ma RGB ne ha solo 1)
+    uint8_t *dst_data[4] = {0};
+
+    // 4 interi ovvero quanti byte occupa una riga dell'immagine in memoria
+    int dst_linesize[4] = {0};
+
+    av_image_fill_arrays(dst_data, dst_linesize, rgb_video_buffer, AV_PIX_FMT_RGB24, width, height, 1);
+
     // pacchetti, pezzi di dati compressi misteriosi che contengono i frame compressi del video. tipo h264, h265 ecc...
     AVPacket *packet = av_packet_alloc();
 
