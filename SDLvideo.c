@@ -144,7 +144,7 @@ int SDLvideo_main(const char *source) {
             if (ret < 0) {fprintf(stderr, "Pacchetti non ricevuti.\n");break;} // se è maggiore di 0 è un errore (check)
                 
             while (avcodec_receive_frame(codec_ctx, frame) >= 0) {
-                    int i = 1 + i;
+                    int i = 1 + i; // frame kounter
                     printf("Frame %d: %dx%d\n", i, frame->width, frame->height);
                 }
         }
