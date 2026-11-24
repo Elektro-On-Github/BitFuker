@@ -213,9 +213,11 @@ int SDLvideo_main(const char *source) {
             int ret = avcodec_send_packet(codec_ctx, packet); // consegna il pacchetto compresso al decoder
             
             if (ret < 0) {fprintf(stderr, "Pacchetti non ricevuti.\n");break;} // se è maggiore di 0 è un errore (check)
-                
+            
+            int i = 0; // var per il kounter
+
             while (avcodec_receive_frame(codec_ctx, frame) >= 0) {
-                    int i = 1 + i; // frame kounter
+                    i = i + 1; // frame kounter
                     printf("Frame %d: %dx%d\n", i, frame->width, frame->height);
 
                     // sws_scale()
@@ -264,47 +266,6 @@ int SDLvideo_main(const char *source) {
     printf("Container: %s\n", format_ctx->iformat->long_name); 
 
     avformat_close_input(&format_ctx);
-
-    return 0;
-}
-
-// 4 testing only
-int main() {
-
-    // Inizializza + check SDL3
-    if (!SDL_Init(SDL_INIT_VIDEO)) {
-        fprintf(stderr, "SDL Error: %s\n", SDL_GetError());
-        return 1;
-    }
-
-    // crea finestra
-    SDL_Window *window = SDL_CreateWindow("BitFuker", 1280, 720, SDL_WINDOW_RESIZABLE);
-    // cambia la riga con quello qui sotto se vuoi la reso custom
-    // SDL_Window *window = SDL_CreateWindow("BitFuker", codec_ctx->width, codec_ctx->height, SDL_WINDOW_RESIZABLE);
-
-    // check finestra
-    if (window == NULL) {
-        fprintf(stderr, "Window Error: %s\n", SDL_GetError());
-        SDL_Quit();
-        return 1;
-    }
-
-    // Event loop
-    int running = 1;
-    SDL_Event event;
-
-    while (running) {
-        while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_EVENT_QUIT) {running = 0;} // se l'utente quitta, si quitta dal loop
-        }
-        SDL_Delay(10);
-    }
-
-    // Cleanup
-    sws_freeContext(sws_ctx);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
-    av_free(rgb_video_buffer);
 
     return 0;
 }
