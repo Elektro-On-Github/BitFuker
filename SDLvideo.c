@@ -116,6 +116,50 @@ int SDLvideo_main(const char *source) {
         return 1;
     }
 
+    SDL_Window *window = SDL_CreateWindow("BitFuker", codec_ctx->width, codec_ctx->height, SDL_WINDOW_RESIZABLE);
+
+    //check errori
+    if (window == NULL) {
+        fprintf(stderr, "Window error: %s\n", SDL_GetError());
+        return 1;
+    }
+
+    SDL_Renderer *renderer = SDL_CreateRenderer(window, NULL); // renderizza la finestra
+
+    // check per vedere se il render funziona, altrimenti pulisce
+    if (renderer == NULL) {
+        fprintf(stderr, "Renderer error: %s\n", SDL_GetError());
+        SDL_DestroyWindow(window);
+        return 1;
+    }
+
+    // SDL_Texture *texture = SDL_CreateTexture(puntatore a renderer, tipo framebuffer, tipo di accesso (streaming è per le robe che richiedono un fottio di banda), codec_ctx->width, codec_ctx->height);
+    SDL_Texture *texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGB24, SDL_TEXTUREACCESS_STREAMING, codec_ctx->width, codec_ctx->height);
+
+    // idem qui, check e pulizia se va male
+    if (texture == NULL) {
+        fprintf(stderr, "Texture error: %s\n", SDL_GetError());
+        SDL_DestroyRenderer(renderer);
+        SDL_DestroyWindow(window);
+        return 1;
+    }
+
+    // passa la roba nelle variabili
+    int width = codec_ctx->width;
+    int height = codec_ctx->height;
+
+    // alloca lo spazio per il framebuffer
+    unsigned char *rgb_video_buffer = av_malloc(width * height * 3);
+
+    // check per vedere se il pointer non punta a un cazzo
+    if (rgb_video_buffer == NULL) {
+        fprintf(stderr, "Cannot allocate RGB buffer.\n");
+        SDL_DestroyTexture(texture);
+        SDL_DestroyRenderer(renderer);
+        SDL_DestroyWindow(window);
+        return 1;
+    }
+
     // pacchetti, pezzi di dati compressi misteriosi che contengono i frame compressi del video. tipo h264, h265 ecc...
     AVPacket *packet = av_packet_alloc();
 
@@ -202,6 +246,7 @@ int main() {
     // Cleanup
     SDL_DestroyWindow(window);
     SDL_Quit();
+    av_free(rgb_video_buffer);
 
     return 0;
 }
