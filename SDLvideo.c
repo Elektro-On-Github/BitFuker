@@ -144,7 +144,8 @@ int SDLvideo_main(const char *source) {
             if (ret < 0) {fprintf(stderr, "Pacchetti non ricevuti.\n");break;} // se è maggiore di 0 è un errore (check)
                 
             while (avcodec_receive_frame(codec_ctx, frame) >= 0) {
-                    printf("Frame: %dx%d\n", frame->width, frame->height);
+                    int i = 1 + i;
+                    printf("Frame %d: %dx%d\n", i, frame->width, frame->height);
                 }
         }
 
@@ -159,4 +160,9 @@ int SDLvideo_main(const char *source) {
     avformat_close_input(&format_ctx);
 
     return 0;
+}
+
+// 4 testing only
+int main() {
+    SDLvideo_main("/home/elektrowindows/vin.webm");
 }

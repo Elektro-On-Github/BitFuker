@@ -10,7 +10,6 @@
 #include "FXs/imgFX.h"
 #include "help/help.h"
 #include "SDLimg.h"
-#include "SDLvideo.h"
 
 // argc = argument count
 // argv = argument vector (argomenti passati al programma sotto forma di array di stringhe)
