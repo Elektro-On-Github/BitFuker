@@ -179,6 +179,9 @@ int SDLvideo_main(const char *source) {
     // sws_getContext(width_originale, height_originale, codec_ctx->pix_fmt_formato_px_originale, width_destinazione, height_destinazione, AV_PIX_FMT_RGB24_formato_destinazione, SWS_BILINEAR_calcola_scaling_pulito, NULL_filtri_custom_w, NULL_filtri_custom_h, NULL_roba_plus_conversione);
     struct SwsContext *sws_ctx = sws_getContext(width, height, codec_ctx->pix_fmt, width, height, AV_PIX_FMT_RGB24, SWS_BILINEAR, NULL, NULL, NULL);
 
+    //check per il pointer
+    if (sws_ctx == NULL) {printf("sws_getContext() error"); return 1;}
+
     // pacchetti, pezzi di dati compressi misteriosi che contengono i frame compressi del video. tipo h264, h265 ecc...
     AVPacket *packet = av_packet_alloc();
 
@@ -214,6 +217,41 @@ int SDLvideo_main(const char *source) {
             while (avcodec_receive_frame(codec_ctx, frame) >= 0) {
                     int i = 1 + i; // frame kounter
                     printf("Frame %d: %dx%d\n", i, frame->width, frame->height);
+
+                    // sws_scale()
+                    // sws_ctx: convertitore configurato prima
+                    // frame->data: dati del frame originale
+                    // frame->linesize: stride dei piani originali
+                    // 0: prima riga da convertire
+                    // frame->height: numero di righe da convertire
+                    // dst_data: destinazione roba in RGB
+                    // dst_linesize: stride destinazione RGB
+                    // QUI AVVIENE LA CONVERSIONE EFFETTIVA
+                    int check = sws_scale(sws_ctx, (const uint8_t * const *)frame->data, frame->linesize, 0, frame->height, dst_data, dst_linesize);
+
+                    // piccoli checkz
+                    if (check < 0) {printf("conversione fallita"); return 1;}
+                    if (check != height) {printf("conversione incompleta"); return 1;}
+
+                    // aggiorna texture della finestra
+                    // texture: texture di SDL
+                    // NULL: TUTTA LA TEXTURE
+                    // dst_data[0]: indirizzo pixel RGB
+                    // dst_linesize[0]: distanza tra righe
+                    SDL_UpdateTexture(texture, NULL, dst_data[0], dst_linesize[0]);
+
+                    // pulisce il contenuto del rendering target (e lo prepara per un nuovo disegno)
+                    SDL_RenderClear(renderer);
+
+                    // spara la roba nuova
+                    // renderer: roba della finestra
+                    // texture: roba da disegnare
+                    // NULL: TUTTA la finestra
+                    // NULL: Tutta l'area disponibile
+                    SDL_RenderTexture(renderer, texture, NULL, NULL);
+
+                    // presenta a schermo, la mostra
+                    SDL_RenderPresent(renderer);
                 }
         }
 
@@ -263,6 +301,7 @@ int main() {
     }
 
     // Cleanup
+    sws_freeContext(sws_ctx);
     SDL_DestroyWindow(window);
     SDL_Quit();
     av_free(rgb_video_buffer);
