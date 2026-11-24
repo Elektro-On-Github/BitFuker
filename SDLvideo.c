@@ -78,6 +78,15 @@ int SDLvideo_main(const char *source) {
         return 1;
     } // stream error
 
+    AVStream *video_stream = format_ctx->streams[video_stream_index]; // prende il numero dello stream
+    double fps = av_q2d(video_stream->avg_frame_rate); // crea una var con gli fps del video
+
+    //check FPS
+    if (fps <= 0) {fprintf(stderr, "Invalid video framerate.\n"); return 1;}
+    
+    double frame_time = 1.0 / fps; // frame time in sec (0.00xx)
+    printf("Video FPS: %.2f\n", fps); // stampa
+
     const AVCodec *codec = avcodec_find_decoder(format_ctx->streams[video_stream_index]->codecpar->codec_id); // capisce il codec e poi lo usa per decodificare il video. codecpar->codec_id = tipo di codec (h264, h265 ecc...)
 
     if (codec == NULL) { // se non trova il decoder droppa errore
@@ -220,6 +229,9 @@ int SDLvideo_main(const char *source) {
     int running = 1;
     SDL_Event event;
 
+    int i = 0; // var per il kounter
+
+    Uint64 frequency = SDL_GetPerformanceFrequency(); // piglia i tick fatti in un sec da SDL
 
     // il while legge i pacchetti dalla sorgente
     // format_ctx = struct che contiene tutte le info del file/flusso
@@ -242,8 +254,6 @@ int SDLvideo_main(const char *source) {
                 av_packet_unref(packet);
                 break;
             }
-            
-            int i = 0; // var per il kounter
 
             // ciclo per chiudere la finestra
             while (SDL_PollEvent(&event)) {
@@ -253,6 +263,8 @@ int SDLvideo_main(const char *source) {
             if (!running) {av_packet_unref(packet); break;}
 
             while (avcodec_receive_frame(codec_ctx, frame) >= 0) {
+                    Uint64 frame_start = SDL_GetPerformanceCounter(); // registra momento preciso in un inizia ad elaborare il frame
+
                     i = i + 1; // frame kounter
                     printf("Frame %d: %dx%d\n", i, frame->width, frame->height);
 
@@ -290,6 +302,18 @@ int SDLvideo_main(const char *source) {
 
                     // presenta a schermo, la mostra
                     SDL_RenderPresent(renderer);
+
+                    // frame end
+                    Uint64 frame_end = SDL_GetPerformanceCounter();
+
+                    // calcola tempo impiegato per l'elaborazione
+                    double elapsed = (double)(frame_end - frame_start) / frequency;
+                    double wait_time = frame_time - elapsed; // tempo di attesa
+
+                    if (wait_time > 0) {
+                        Uint32 delay_ms = (Uint32)(wait_time * 1000.0);
+                        if (delay_ms > 0) {SDL_Delay(delay_ms);}
+                    }
                 }
         }
 
@@ -304,4 +328,9 @@ int SDLvideo_main(const char *source) {
     avformat_close_input(&format_ctx);
 
     return 0;
+}
+
+int main() {
+    char *path[] = {"/home/elektrowindows/VideoCanon.mp4"};
+    SDLvideo_main(path[0]);
 }
