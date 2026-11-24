@@ -25,6 +25,9 @@
 
 #include <SDL3/SDL.h>
 
+#include <libavutil/imgutils.h>
+//roba per preparare il frambufeffer RGB24
+
 int SDLvideo_main(const char *source) {
     if (source == NULL) {printf("No source specified.\n"); return 1;} // se non c'è sorgente, bang
 
@@ -166,13 +169,39 @@ int SDLvideo_main(const char *source) {
 
 // 4 testing only
 int main() {
-    //check di SDL
+
+    // Inizializza + check SDL3
     if (!SDL_Init(SDL_INIT_VIDEO)) {
         fprintf(stderr, "SDL Error: %s\n", SDL_GetError());
         return 1;
     }
 
-    SDLvideo_main("/home/elektrowindows/vin.webm");
+    // crea finestra
+    SDL_Window *window = SDL_CreateWindow("BitFuker", 1280, 720, SDL_WINDOW_RESIZABLE);
+    // cambia la riga con quello qui sotto se vuoi la reso custom
+    // SDL_Window *window = SDL_CreateWindow("BitFuker", codec_ctx->width, codec_ctx->height, SDL_WINDOW_RESIZABLE);
 
+    // check finestra
+    if (window == NULL) {
+        fprintf(stderr, "Window Error: %s\n", SDL_GetError());
+        SDL_Quit();
+        return 1;
+    }
+
+    // Event loop
+    int running = 1;
+    SDL_Event event;
+
+    while (running) {
+        while (SDL_PollEvent(&event)) {
+            if (event.type == SDL_EVENT_QUIT) {running = 0;} // se l'utente quitta, si quitta dal loop
+        }
+        SDL_Delay(10);
+    }
+
+    // Cleanup
+    SDL_DestroyWindow(window);
     SDL_Quit();
+
+    return 0;
 }
