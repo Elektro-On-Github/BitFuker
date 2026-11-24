@@ -140,8 +140,14 @@ int SDLvideo_main(const char *source) {
     while (av_read_frame(format_ctx, packet) >= 0) {
         if (packet->stream_index == video_stream_index) { // controlliamo a quale stream contiene il pacchetto (se è audio --> FUCKOFF, se è video --> OK, se è subtitle --> FUCKOFF)
             int ret = avcodec_send_packet(codec_ctx, packet); // consegna il pacchetto compresso al decoder
-            if (ret < 0) {fprintf(stderr, "Pacchetti non ricevuti.\n");break;} // se è maggiore di 0 è un errore
+            
+            if (ret < 0) {fprintf(stderr, "Pacchetti non ricevuti.\n");break;} // se è maggiore di 0 è un errore (check)
+                
+            while (avcodec_receive_frame(codec_ctx, frame) >= 0) {
+                    printf("Frame: %dx%d\n", frame->width, frame->height);
+                }
         }
+
         av_packet_unref(packet); // rilascia i dati dal pacchetto, cosi il prossimo può usare la struttura. Il pacchetto precedende è stato inviato da avcodec_send_packet() al decoder.
     }
 
