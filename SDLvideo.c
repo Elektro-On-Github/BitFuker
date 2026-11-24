@@ -116,6 +116,14 @@ int SDLvideo_main(const char *source) {
         return 1;
     }
 
+    // inizializza SDL con dei check integrati
+    if (!SDL_Init(SDL_INIT_VIDEO)) {
+        fprintf(stderr, "SDL Init error: %s\n", SDL_GetError());
+        avcodec_free_context(&codec_ctx);
+        avformat_close_input(&format_ctx);
+        return 1;
+    }
+
     SDL_Window *window = SDL_CreateWindow("BitFuker", codec_ctx->width, codec_ctx->height, SDL_WINDOW_RESIZABLE);
 
     //check errori
@@ -171,7 +179,10 @@ int SDLvideo_main(const char *source) {
 
     // av_image_fill_arrays(dove ffmpeg scrive gli indirizzi dei piani, dove scrive gli stride, buffer RGB, specifica formato RGB,larghezza, altezza, allineamento byte)
     // non ho ben capito cosa e' l'allineamento ma so che deve stare a 1
-    av_image_fill_arrays(dst_data, dst_linesize, rgb_video_buffer, AV_PIX_FMT_RGB24, width, height, 1);
+    int image_size = av_image_fill_arrays(dst_data, dst_linesize, rgb_video_buffer, AV_PIX_FMT_RGB24, width, height, 1);
+
+    // check di av_image_fill_arrays()
+    if (image_size < 0) {fprintf(stderr, "buffer RGB non inizializzato.\n"); return 1;}
 
     // prepara convertitore ffmpeg fa boh a rgb24
     // SwsContext tipo di struttura di ffmpeg
@@ -205,6 +216,11 @@ int SDLvideo_main(const char *source) {
         return 1;
     }
 
+    // roba per far funzionare gli eventi SDL
+    int running = 1;
+    SDL_Event event;
+
+
     // il while legge i pacchetti dalla sorgente
     // format_ctx = struct che contiene tutte le info del file/flusso
     // packet = struct in cui ffmpeg inserisce il prossimo paacchetto
@@ -212,9 +228,29 @@ int SDLvideo_main(const char *source) {
         if (packet->stream_index == video_stream_index) { // controlliamo a quale stream contiene il pacchetto (se è audio --> FUCKOFF, se è video --> OK, se è subtitle --> FUCKOFF)
             int ret = avcodec_send_packet(codec_ctx, packet); // consegna il pacchetto compresso al decoder
             
-            if (ret < 0) {fprintf(stderr, "Pacchetti non ricevuti.\n");break;} // se è maggiore di 0 è un errore (check)
+            // check che mi ha fatto ChatGPT. FFMpeg in C e' fottutamente difficile
+            if (ret == AVERROR(EAGAIN)) {
+                fprintf(stderr, "Decoder pieno: bisogna leggere i frame pendenti.\n");
+                av_packet_unref(packet);
+                continue;
+            }
+
+            if (ret < 0) {
+                char errbuf[AV_ERROR_MAX_STRING_SIZE];
+                av_strerror(ret, errbuf, sizeof(errbuf));
+                fprintf(stderr, "Decoder error: %s\n", errbuf);
+                av_packet_unref(packet);
+                break;
+            }
             
             int i = 0; // var per il kounter
+
+            // ciclo per chiudere la finestra
+            while (SDL_PollEvent(&event)) {
+                if (event.type == SDL_EVENT_QUIT) {running = 0; break;}
+            }
+
+            if (!running) {av_packet_unref(packet); break;}
 
             while (avcodec_receive_frame(codec_ctx, frame) >= 0) {
                     i = i + 1; // frame kounter
