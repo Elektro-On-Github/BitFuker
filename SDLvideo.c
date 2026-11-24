@@ -23,6 +23,8 @@
 #include <libavutil/error.h>
 // gestione errori, da codice numerico a stringa di errore
 
+#include <SDL3/SDL.h>
+
 int SDLvideo_main(const char *source) {
     if (source == NULL) {printf("No source specified.\n"); return 1;} // se non c'è sorgente, bang
 
@@ -164,5 +166,13 @@ int SDLvideo_main(const char *source) {
 
 // 4 testing only
 int main() {
+    //check di SDL
+    if (!SDL_Init(SDL_INIT_VIDEO)) {
+        fprintf(stderr, "SDL Error: %s\n", SDL_GetError());
+        return 1;
+    }
+
     SDLvideo_main("/home/elektrowindows/vin.webm");
+
+    SDL_Quit();
 }
