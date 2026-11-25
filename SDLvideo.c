@@ -310,9 +310,9 @@ int SDLvideo_main(const char *source) {
                     double elapsed = (double)(frame_end - frame_start) / frequency;
                     double wait_time = frame_time - elapsed; // tempo di attesa
 
-                    if (wait_time > 0) {
-                        Uint32 delay_ms = (Uint32)(wait_time * 1000.0);
-                        if (delay_ms > 0) {SDL_Delay(delay_ms);}
+                    if (wait_time > 0.0) {
+                        Uint64 delay_ns = (Uint64)(wait_time * 1000000000.0);
+                        SDL_DelayPrecise(delay_ns);
                     }
                 }
         }
