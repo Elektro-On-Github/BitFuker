@@ -331,6 +331,6 @@ int SDLvideo_main(const char *source) {
 }
 
 int main() {
-    char *path[] = {"/home/elektrowindows/main.mp4"};
+    char *path[] = {"/home/elektrowindows/out.mp4"};
     SDLvideo_main(path[0]);
 }
