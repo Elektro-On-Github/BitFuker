@@ -43,6 +43,15 @@ void hugedistortion(unsigned char *framebuffer, int dimFB) {
     }
 }
 
+void brokenVHS(unsigned char *framebuffer, int dimFB) {
+    int i;
+    int kounter = 1;
+    for (i = 0; i < (dimFB - (kounter + 1)); i ++) {
+        framebuffer[i] = framebuffer[i+kounter] - framebuffer[i+100];
+    }
+}
+
+
 void nintendo3ds_fx(unsigned char *framebuffer, int dimFB) {
     for (int i = 0; i < dimFB - 81; i = i + 2) {
         framebuffer[i + 10] = framebuffer[i + 20];
@@ -65,6 +74,7 @@ void soft_ghostfx(unsigned char *framebuffer, int dimFB) {
     }
 }
 
+// da ottimizzare SUBITO
 void hard_ghostfx(unsigned char *framebuffer, int dimFB) {
     for (int i = 0; i < dimFB - 200; i = i + 2) {
         framebuffer[i + 2] = framebuffer[i + 20];

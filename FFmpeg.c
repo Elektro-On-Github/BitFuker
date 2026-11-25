@@ -1,86 +1,71 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <SDL3/SDL.h>
+#include <stdint.h>
 
-int main(void)
-{
-    char *input = "https://remotion.media/video-10m.mp4";
+void hard_ghostfx(unsigned char *framebuffer, int dimFB) {
+    for (int i = 0; i < dimFB - 200; i = i + 2) {
+        framebuffer[i + 2] = framebuffer[i + 20];
+        framebuffer[i + 4] = framebuffer[i + 40];
+        framebuffer[i + 6] = framebuffer[i + 60];
+        framebuffer[i + 8] = framebuffer[i + 80];
+        framebuffer[i + 10] = framebuffer[i + 100];
+        framebuffer[i + 12] = framebuffer[i + 120];
+        framebuffer[i + 14] = framebuffer[i + 140];
+        framebuffer[i + 16] = framebuffer[i + 160];
+        framebuffer[i + 18] = framebuffer[i + 180];
+    }
+}
+
+
+int main(void) {
+    char *input = "/home/elektrowindows/subwooferazzo_ok_h264.mp4";
     char command[4096];
-    int width, height;
+    int width = 1920;
+    int height = 1080;
+    int fps = 60;
 
-    // Dimensioni video
-    snprintf(command, sizeof(command), "ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=p=0:s=x \"%s\"", input);
+    size_t dimFB = (size_t)width * height * 3;
+    unsigned char *framebuffer = malloc(dimFB);
 
-    FILE *probe = popen(command, "r");
-    if (!probe || fscanf(probe, "%dx%d", &width, &height) != 2) {return 1;}
+    if (!framebuffer) return 1;
 
-    pclose(probe);
+    // FFmpeg: decodifica in RGB24
+    snprintf(command, sizeof(command),
+        "ffmpeg -v error -i \"%s\" -an -f rawvideo "
+        "-pix_fmt rgb24 pipe:1", input);
 
-    // Buffer RGB24
-    size_t size = (size_t)width * height * 3;
-    unsigned char *buffer = malloc(size);
-    if (!buffer) {return 1;}
-
-    // Decodifica continua a 30 FPS
-    snprintf(command, sizeof(command), "ffmpeg -v error -i \"%s\" -an -vf fps=30 -f rawvideo -pix_fmt rgb24 pipe:1", input);
-
-    FILE *stream = popen(command, "r");
-    if (!stream) {
-        free(buffer);
+    FILE *decoder = popen(command, "r");
+    if (!decoder) {
+        free(framebuffer);
         return 1;
     }
 
-    // SDL3
-    if (!SDL_Init(SDL_INIT_VIDEO)) {return 1;}
+    // FFplay: riceve RGB24 modificato
+    snprintf(command, sizeof(command),
+        "ffplay -v error -f rawvideo -pixel_format rgb24 "
+        "-video_size %dx%d -framerate %d -i pipe:0",
+        width, height, fps);
 
-    SDL_Window *window = SDL_CreateWindow("BitFuker", width, height, 0);
-
-    SDL_Renderer *renderer = SDL_CreateRenderer(window, NULL);
-
-    SDL_Texture *texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGB24, SDL_TEXTUREACCESS_STREAMING, width, height);
-
-    if (!window || !renderer || !texture) {return 1;}
-
-    SDL_Event event;
-    int running = 1;
-    Uint64 next_frame = SDL_GetTicks();
-
-    while (running) {
-
-        while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_EVENT_QUIT) {running = 0;}
-        }
-
-        if (!running) {break;}
-
-        // Legge un frame completo
-        if (fread(buffer, 1, size, stream) != size) {break;}
-
-        // Aggiorna texture
-        SDL_UpdateTexture(texture, NULL, buffer, width * 3);
-
-        SDL_RenderClear(renderer);
-        SDL_RenderTexture(renderer, texture, NULL, NULL);
-        SDL_RenderPresent(renderer);
-
-        // Sincronizzazione a 30 FPS
-        double frame_time = 1000.0 / 30.0;
-        next_frame += frame_time;
-
-        while (SDL_GetTicks() < next_frame && running) {
-            SDL_PollEvent(&event);
-
-            if (event.type == SDL_EVENT_QUIT) {running = 0;}
-        }
+    FILE *player = popen(command, "w");
+    if (!player) {
+        pclose(decoder);
+        free(framebuffer);
+        return 1;
     }
 
-    pclose(stream);
-    SDL_DestroyTexture(texture);
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
+    // Elaborazione frame per frame
+    while (fread(framebuffer, 1, dimFB, decoder) == dimFB) {
 
-    free(buffer);
+        hard_ghostfx(framebuffer, dimFB);
+
+        if (fwrite(framebuffer, 1, dimFB, player) != dimFB)
+            break;
+    }
+
+    pclose(decoder);
+    pclose(player);
+    free(framebuffer);
+
     return 0;
 }

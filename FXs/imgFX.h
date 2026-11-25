@@ -11,5 +11,6 @@ void hard_ghostfx(unsigned char *framebuffer, int dimFB);
 void granuly(unsigned char *framebuffer, int dimFB);
 void blacknoise(unsigned char *framebuffer, int dimFB);
 void hugedistortion(unsigned char *framebuffer, int dimFB);
+void brokenVHS(unsigned char *framebuffer, int dimFB);
 
 #endif
