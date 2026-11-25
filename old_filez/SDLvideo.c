@@ -1,3 +1,5 @@
+/* gcc -std=c23 -Wall -Wextra -g -I../SDL3-3.4.20/include SDLvideo.c -Lbuild/sdl3 -Wl,-rpath,'$ORIGIN/build/sdl3' $(pkg-config --cflags --libs libavformat libavcodec libavutil libswscale) -lSDL3 -o video_test*/
+
 #include <stdio.h>
 
 #include <libavformat/avformat.h>
@@ -331,6 +333,10 @@ int SDLvideo_main(const char *source) {
 }
 
 int main() {
+<<<<<<< HEAD:old_filez/SDLvideo.c
     char *path[] = {"/home/elektrowindows/out.mp4"};
+=======
+    char *path[] = {"/home/elektrowindows/subwooferazzo_ok_h264.mp4"};
+>>>>>>> 1e37f43 (edit prima del pull):SDLvideo.c
     SDLvideo_main(path[0]);
 }
