@@ -3,44 +3,90 @@
 #include <stdlib.h>
 
 int main(void) {
-    char *input = "/home/elektrowindows/idk.mp4";
+
+    char *input = "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_5MB.mp4";
+
+    // char buf dove stanno i comandi
     char command[4096];
-    int width = 1920;
-    int height = 1080;
-    int fps = 60;
 
-    size_t dimFB = (size_t)width * height * 3;
-    unsigned char *framebuffer = malloc(dimFB);
+    // video in input: width, height ed fps automatici
+    // ffprobe restituisce una frazione quando chiedi gli FPS.
+    // fps_num = numeratore; fps_den = denominatore;
+    int width, height;
+    int fps_num, fps_den;
 
-    if (!framebuffer) return 1;
+    // snprintf serve per formattare una stringa per poi ficcarla in un buffer
+    // snprintf(buffer_destinazione, dimensione_buffer, "testo_con_%s_ecc...", argomenti da formattare)
+    snprintf(command, sizeof(command), "ffprobe -v error -select_streams v:0 -show_entries stream=width,height,avg_frame_rate -of csv=p=0:s=x \"%s\"", input);
 
-    // FFmpeg: decodifica in RGB24
-    snprintf(command, sizeof(command), "ffmpeg -v error -i \"%s\" -an -f rawvideo -pix_fmt rgb24 pipe:1", input);
+    // esegue il comando su command e poi legge l'output in modalita' lettura
+    FILE *probe = popen(command, "r");
 
-    FILE *decoder = popen(command, "r");
-    if (!decoder) {
-        free(framebuffer);
+    // se probe e' NULL o probe non ha 4 risultati allora qualcosa non funziona e bang, ret 1!
+    if (probe == NULL || fscanf(probe, "%dx%dx%d/%d", &width, &height, &fps_num, &fps_den) != 4) {
+        // chiude la pipe e killa ffprobe
+        // serche chiudere se il pointer e' diverso da NULL
+        if (probe != NULL) {pclose(probe);}
         return 1;
     }
 
-    // FFplay: riceve RGB24 modificato
-    snprintf(command, sizeof(command), "ffplay -v error -f rawvideo -pixel_format rgb24 -video_size %dx%d -framerate %d -i pipe:0", width, height, fps);
+    // killa e chiude se funziona
+    pclose(probe);
 
+    // calcola gli fps in input
+    // anche se sono interi il risultato sara' in double
+    double input_fps = (double)fps_num / fps_den;
+
+    printf("INPUT: %dx%d @ %.3f FPS\n", width, height, input_fps);
+
+    // OUTPUT: parametri da passare via argv
+    int out_width = 1920;
+    int out_height = 1080;
+    int out_fps = 60;
+
+    // Framebuffer RGB24 con i param di out custom
+    // size_t si usa per le dimensioni
+    size_t dimFB = (size_t)out_width * out_height * 3;
+
+    //alloca byte per quanti sono i byte su dimFB
+    unsigned char *framebuffer = malloc(dimFB);
+
+    // cosa potrebbe mai andare storto!?
+    // la ram potrebbe finire oppure dimFB e' enorme
+    if (!framebuffer) {return 1;}
+
+    // ffmpeg: fa decode con param custom
+    snprintf(command, sizeof(command), "ffmpeg -v error -i \"%s\" -an -vf \"scale=%d:%d,fps=%d\" -f rawvideo -pix_fmt rgb24 pipe:1", input, out_width, out_height, out_fps);
+    // apre come comando
+    FILE *decoder = popen(command, "r");
+    // se decoder = NULL fanculo al framebuffer :)
+    if (!decoder) {free(framebuffer); return 1;}
+
+    // ffplay: riproduzione della roba raw in rgb24 con i parametri custom di prima
+    snprintf(command, sizeof(command), "ffplay -v error -f rawvideo -pixel_format rgb24 -video_size %dx%d -framerate %d pipe:0", out_width, out_height, out_fps);
+
+    // apre comando con scrittura, apre una pipe in scrittura verso stdin di ffplay
     FILE *player = popen(command, "w");
+
+    // se player == NULL; killa ffmpeg; libera il framebuffer; e poi ret 1
     if (!player) {
         pclose(decoder);
         free(framebuffer);
         return 1;
     }
 
-    // Elaborazione frame per frame
+
+    // applica fx frame per frame
+    // fread legge i byte della pipe di ffmpeg e li copia dentro il framebuffer
+    // fread(destinazione, dimensione_elemento, numero_elementi, sorgente)
     while (fread(framebuffer, 1, dimFB, decoder) == dimFB) {
 
-        // fx_fun();
+        // fx_fun(framebuffer, dimFB);
 
         if (fwrite(framebuffer, 1, dimFB, player) != dimFB) {break;}
     }
 
+    // chiude tutto
     pclose(decoder);
     pclose(player);
     free(framebuffer);
