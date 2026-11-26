@@ -4,7 +4,7 @@
 
 int main(void) {
 
-    char *input = "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_5MB.mp4";
+    char *input = "/home/elektrowindows/video-240fps.mp4";
 
     // char buf dove stanno i comandi
     char command[4096];
@@ -42,8 +42,11 @@ int main(void) {
     // OUTPUT: parametri da passare via argv
     int out_width = 1920;
     int out_height = 1080;
-    int out_fps = 60;
+    int out_fps = 240;
 
+    double MBpersecond = (double)out_width * out_height * out_fps * 3.0 / (1024.0 * 1024.0);
+    printf("MB per second: %.1f\n", MBpersecond);
+    
     // Framebuffer RGB24 con i param di out custom
     // size_t si usa per le dimensioni
     size_t dimFB = (size_t)out_width * out_height * 3;
@@ -74,7 +77,6 @@ int main(void) {
         free(framebuffer);
         return 1;
     }
-
 
     // applica fx frame per frame
     // fread legge i byte della pipe di ffmpeg e li copia dentro il framebuffer
