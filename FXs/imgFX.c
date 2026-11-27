@@ -12,14 +12,14 @@ void vline(unsigned char *framebuffer, int dimFB, int width) {
     }
 }
 
-void xorfx(unsigned char *framebuffer, int dimFB) {
+void xorfx(unsigned char *framebuffer, int dimFB, int width) {
     int i;
     for (i = 0; i < dimFB; i++) {
         framebuffer[i] = framebuffer[i] ^ 255; // ^ fa lo xor
     }
 }
 
-void saturate(unsigned char *framebuffer, int dimFB) {
+void saturate(unsigned char *framebuffer, int dimFB, int width) {
     int i;
     for (i = 0; i < dimFB; i++) {
         if (framebuffer[i] * 5 > 255) {framebuffer[i] = 255;} // se supera il 255 con la molt * 5 moltiplica per 2
@@ -27,7 +27,7 @@ void saturate(unsigned char *framebuffer, int dimFB) {
     }
 }
 
-void bug(unsigned char *framebuffer, int dimFB) {
+void bug(unsigned char *framebuffer, int dimFB, int width) {
     int i, x;
     for (i = 0; i < dimFB; i++) {
         x = i * 0.001;
@@ -35,24 +35,8 @@ void bug(unsigned char *framebuffer, int dimFB) {
     }
 }
 
-void hugedistortion(unsigned char *framebuffer, int dimFB) {
-    int i;
-    int kounter = 1;
-    for (i = 0; i < (dimFB - (kounter + 1)); i++) {
-        framebuffer[i] = framebuffer[i+kounter] - framebuffer[i];
-    }
-}
 
-void brokenVHS(unsigned char *framebuffer, int dimFB) {
-    int i;
-    int kounter = 1;
-    for (i = 0; i < (dimFB - (kounter + 1)); i ++) {
-        framebuffer[i] = framebuffer[i+kounter] - framebuffer[i+100];
-    }
-}
-
-
-void nintendo3ds_fx(unsigned char *framebuffer, int dimFB) {
+void nintendo3ds_fx(unsigned char *framebuffer, int dimFB, int width) {
     for (int i = 0; i < dimFB - 81; i = i + 2) {
         framebuffer[i + 10] = framebuffer[i + 20];
         framebuffer[i + 20] = framebuffer[i + 40];
@@ -60,7 +44,7 @@ void nintendo3ds_fx(unsigned char *framebuffer, int dimFB) {
     }
 }
 
-void soft_ghostfx(unsigned char *framebuffer, int dimFB) {
+void soft_ghostfx(unsigned char *framebuffer, int dimFB, int width) {
     for (int i = 0; i < dimFB - 100; i = i + 2) {
         framebuffer[i + 1] = framebuffer[i + 10];
         framebuffer[i + 2] = framebuffer[i + 20];
@@ -75,7 +59,7 @@ void soft_ghostfx(unsigned char *framebuffer, int dimFB) {
 }
 
 // da ottimizzare SUBITO
-void hard_ghostfx(unsigned char *framebuffer, int dimFB) {
+void hard_ghostfx(unsigned char *framebuffer, int dimFB, int width) {
     for (int i = 0; i < dimFB - 200; i = i + 2) {
         framebuffer[i + 2] = framebuffer[i + 20];
         framebuffer[i + 4] = framebuffer[i + 40];
@@ -98,7 +82,7 @@ void hard_ghostfx(unsigned char *framebuffer, int dimFB) {
     }
 }
 
-void granuly(unsigned char *framebuffer, int dimFB) {
+void granuly(unsigned char *framebuffer, int dimFB, int width) {
     for (int i = 0; i < dimFB - 4; i = i + rand() % 46 + 1) {
         framebuffer[i + 1] = rand() % 255;
         framebuffer[i + 2] = rand() % 255;
@@ -106,10 +90,26 @@ void granuly(unsigned char *framebuffer, int dimFB) {
     }
 }
 
-void blacknoise(unsigned char *framebuffer, int dimFB) {
+void blacknoise(unsigned char *framebuffer, int dimFB, int width) {
     for (int i = 0; i < dimFB - 4; i = i + rand() % 12 + 1) {
         framebuffer[i + 1] = 0;
         framebuffer[i + 2] = 0;
         framebuffer[i + 3] = 0;
+    }
+}
+
+void hugedistortion(unsigned char *framebuffer, int dimFB, int width) {
+    int i;
+    int kounter = 1;
+    for (i = 0; i < (dimFB - (kounter + 1)); i++) {
+        framebuffer[i] = framebuffer[i+kounter] - framebuffer[i];
+    }
+}
+
+void CRTglitch(unsigned char *framebuffer, int dimFB, int width) {
+    int i;
+    int kounter = 1;
+    for (i = 0; i < (dimFB - (kounter + 1)); i ++) {
+        framebuffer[i] = framebuffer[i+kounter] - framebuffer[i+10];
     }
 }

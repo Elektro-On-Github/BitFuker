@@ -4,6 +4,8 @@
 #include "FXs/imgFX.h"
 #include <string.h>
 
+#include "help/help.h"
+
 int video(char *argv[]) {
 
     char *input = argv[2];
@@ -87,23 +89,28 @@ int video(char *argv[]) {
         return 1;
     }
 
-    if (strcmp(argv[3], "--vertical-line") == 0) {vline(framebuffer, dimFB, width);}
-    else if (strcmp(argv[3], "--xor") == 0) {xorfx(framebuffer, dimFB);}
-    else if (strcmp(argv[3], "--saturate") == 0) {saturate(framebuffer, dimFB);}
-    else if (strcmp(argv[3], "--bug") == 0) {bug(framebuffer, dimFB);}
-    else if (strcmp(argv[3], "--nintendo-3ds") == 0) {nintendo3ds_fx(framebuffer, dimFB);}
-    else if (strcmp(argv[3], "--soft-ghost") == 0) {soft_ghostfx(framebuffer, dimFB);}
-    else if (strcmp(argv[3], "--hard-ghost") == 0) {hard_ghostfx(framebuffer, dimFB);}
-    else if (strcmp(argv[3], "--granuly") == 0) {granuly(framebuffer, dimFB);}
-    else if (strcmp(argv[3], "--blacknoise") == 0) {blacknoise(framebuffer, dimFB);}
-    else if (strcmp(argv[3], "--huge-distortion") == 0) {hugedistortion(framebuffer, dimFB);}
+    void (*fx)(unsigned char *framebuffer, int dimFB, int width) = NULL;
 
+    if (strcmp(argv[3], "--vertical-line") == 0) {fx = vline;}
+    else if (strcmp(argv[3], "--xor") == 0) {fx = xorfx;}
+    else if (strcmp(argv[3], "--saturate") == 0) {fx = saturate;}
+    else if (strcmp(argv[3], "--bug") == 0) {fx = bug;}
+    else if (strcmp(argv[3], "--nintendo-3ds") == 0) {fx = nintendo3ds_fx;}
+    else if (strcmp(argv[3], "--soft-ghost") == 0) {fx = soft_ghostfx;}
+    else if (strcmp(argv[3], "--hard-ghost") == 0) {fx = hard_ghostfx;}
+    else if (strcmp(argv[3], "--granuly") == 0) {fx = granuly;}
+    else if (strcmp(argv[3], "--blacknoise") == 0) {fx = blacknoise;}
+    else if (strcmp(argv[3], "--huge-distortion") == 0) {fx = hugedistortion;}
+    else if (strcmp(argv[3], "--CRT-glitch") == 0) {fx = CRTglitch;}
+    else {help(); return 0;}
+
+    if (fx == NULL) {printf("fx pointer = NULL"); return 1;}
     // applica fx frame per frame
     // fread legge i byte della pipe di ffmpeg e li copia dentro il framebuffer
     // fread(destinazione, dimensione_elemento, numero_elementi, sorgente)
     while (fread(framebuffer, 1, dimFB, decoder) == dimFB) {
 
-        // fx(framebuffer, dimFB);
+        fx(framebuffer, dimFB, width);
 
         if (fwrite(framebuffer, 1, dimFB, player) != dimFB) {break;}
     }

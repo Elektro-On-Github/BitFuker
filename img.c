@@ -39,15 +39,16 @@ int img(char *argv[]) {
 
     //param
     if (strcmp(argv[3], "--vertical-line") == 0) {vline(framebuffer, dimFB, width);}
-    else if (strcmp(argv[3], "--xor") == 0) {xorfx(framebuffer, dimFB);}
-    else if (strcmp(argv[3], "--saturate") == 0) {saturate(framebuffer, dimFB);}
-    else if (strcmp(argv[3], "--bug") == 0) {bug(framebuffer, dimFB);}
-    else if (strcmp(argv[3], "--nintendo-3ds") == 0) {nintendo3ds_fx(framebuffer, dimFB);}
-    else if (strcmp(argv[3], "--soft-ghost") == 0) {soft_ghostfx(framebuffer, dimFB);}
-    else if (strcmp(argv[3], "--hard-ghost") == 0) {hard_ghostfx(framebuffer, dimFB);}
-    else if (strcmp(argv[3], "--granuly") == 0) {granuly(framebuffer, dimFB);}
-    else if (strcmp(argv[3], "--blacknoise") == 0) {blacknoise(framebuffer, dimFB);}
-    else if (strcmp(argv[3], "--huge-distortion") == 0) {hugedistortion(framebuffer, dimFB);}
+    else if (strcmp(argv[3], "--xor") == 0) {xorfx(framebuffer, dimFB, width);}
+    else if (strcmp(argv[3], "--saturate") == 0) {saturate(framebuffer, dimFB, width);}
+    else if (strcmp(argv[3], "--bug") == 0) {bug(framebuffer, dimFB, width);}
+    else if (strcmp(argv[3], "--nintendo-3ds") == 0) {nintendo3ds_fx(framebuffer, dimFB, width);}
+    else if (strcmp(argv[3], "--soft-ghost") == 0) {soft_ghostfx(framebuffer, dimFB, width);}
+    else if (strcmp(argv[3], "--hard-ghost") == 0) {hard_ghostfx(framebuffer, dimFB, width);}
+    else if (strcmp(argv[3], "--granuly") == 0) {granuly(framebuffer, dimFB, width);}
+    else if (strcmp(argv[3], "--blacknoise") == 0) {blacknoise(framebuffer, dimFB, width);}
+    else if (strcmp(argv[3], "--huge-distortion") == 0) {hugedistortion(framebuffer, dimFB, width);}
+    else if (strcmp(argv[3], "--CRT-glitch") == 0) {CRTglitch(framebuffer, dimFB, width);}
     else {help();}
 
     stbi_write_png("output.png", width, height, 3, framebuffer, width * 3);
