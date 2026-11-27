@@ -4,6 +4,8 @@
 #include <string.h>
 
 #define STB_IMAGE_IMPLEMENTATION
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include <stb/stb_image_write.h>
 #include <stb/stb_image.h>
 
 //h_filez
@@ -48,6 +50,8 @@ int img(char *argv[]) {
     else if (strcmp(argv[3], "--huge-distortion") == 0) {hugedistortion(framebuffer, dimFB);}
     else {help();}
 
+    stbi_write_png("output.png", width, height, 3, framebuffer, width * 3);
+    
     SDLimg(framebuffer, height, width);
 
     return 0;
