@@ -1,10 +1,11 @@
-
+#define _POSIX_C_SOURCE 200809L
 #include <stdio.h>
 #include <stdlib.h>
 
+
 int video(int argc, char *argv[]) {
 
-    char *input = "/home/elektrowindows/idk.mp4";
+    char *input = argv[2];
 
     // char buf dove stanno i comandi
     char command[4096];

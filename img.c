@@ -20,7 +20,7 @@ int img(int argc, char *argv[]) {
 
     // param di base
     if (argc < 3) {help();return 0;} // campo ristretto per i param. avoidiamo roba indefinita
-    char *IMGPath = argv[1];
+    char *IMGPath = argv[2];
 
     // crea un framebuffer che contiene i pixel raw di input.png
     // framebuffer è un pointer che contiene l'indirizzo di mem di inizio degli unsigned_char di 8 bit fino a 255 in dec
@@ -37,17 +37,19 @@ int img(int argc, char *argv[]) {
     //printf("%d", width);
 
     //param
-    if (strcmp(argv[2], "--vertical-line") == 0) {vline(framebuffer, dimFB, width);}
-    else if (strcmp(argv[2], "--xor") == 0) {xorfx(framebuffer, dimFB);}
-    else if (strcmp(argv[2], "--saturate") == 0) {saturate(framebuffer, dimFB);}
-    else if (strcmp(argv[2], "--bug") == 0) {bug(framebuffer, dimFB);}
-    else if (strcmp(argv[2], "--nintendo-3ds") == 0) {nintendo3ds_fx(framebuffer, dimFB);}
-    else if (strcmp(argv[2], "--soft-ghost") == 0) {soft_ghostfx(framebuffer, dimFB);}
-    else if (strcmp(argv[2], "--hard-ghost") == 0) {hard_ghostfx(framebuffer, dimFB);}
-    else if (strcmp(argv[2], "--granuly") == 0) {granuly(framebuffer, dimFB);}
-    else if (strcmp(argv[2], "--blacknoise") == 0) {blacknoise(framebuffer, dimFB);}
-    else if (strcmp(argv[2], "--huge-distortion") == 0) {hugedistortion(framebuffer, dimFB);}
+    if (strcmp(argv[3], "--vertical-line") == 0) {vline(framebuffer, dimFB, width);}
+    else if (strcmp(argv[3], "--xor") == 0) {xorfx(framebuffer, dimFB);}
+    else if (strcmp(argv[3], "--saturate") == 0) {saturate(framebuffer, dimFB);}
+    else if (strcmp(argv[3], "--bug") == 0) {bug(framebuffer, dimFB);}
+    else if (strcmp(argv[3], "--nintendo-3ds") == 0) {nintendo3ds_fx(framebuffer, dimFB);}
+    else if (strcmp(argv[3], "--soft-ghost") == 0) {soft_ghostfx(framebuffer, dimFB);}
+    else if (strcmp(argv[3], "--hard-ghost") == 0) {hard_ghostfx(framebuffer, dimFB);}
+    else if (strcmp(argv[3], "--granuly") == 0) {granuly(framebuffer, dimFB);}
+    else if (strcmp(argv[3], "--blacknoise") == 0) {blacknoise(framebuffer, dimFB);}
+    else if (strcmp(argv[3], "--huge-distortion") == 0) {hugedistortion(framebuffer, dimFB);}
     else {help();}
 
     SDLimg(framebuffer, height, width);
+
+    return 0;
 }
