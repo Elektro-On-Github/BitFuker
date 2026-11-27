@@ -70,15 +70,6 @@ void hard_ghostfx(unsigned char *framebuffer, int dimFB, int width) {
         framebuffer[i + 14] = framebuffer[i + 140];
         framebuffer[i + 16] = framebuffer[i + 160];
         framebuffer[i + 18] = framebuffer[i + 180];
-        framebuffer[i] = framebuffer[i + 4];
-        framebuffer[i] = framebuffer[i + 8];
-        framebuffer[i] = framebuffer[i + 10];
-        framebuffer[i] = framebuffer[i + 12];
-        framebuffer[i] = framebuffer[i + 16];
-        framebuffer[i] = framebuffer[i + 18];
-        framebuffer[i] = framebuffer[i + 20];
-        framebuffer[i] = framebuffer[i + 22];
-        framebuffer[i] = framebuffer[i + 24];
     }
 }
 

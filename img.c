@@ -49,11 +49,11 @@ int img(char *argv[]) {
     else if (strcmp(argv[3], "--blacknoise") == 0) {blacknoise(framebuffer, dimFB, width);}
     else if (strcmp(argv[3], "--huge-distortion") == 0) {hugedistortion(framebuffer, dimFB, width);}
     else if (strcmp(argv[3], "--CRT-glitch") == 0) {CRTglitch(framebuffer, dimFB, width);}
-    else {help();}
+    else {help(); return 0;}
 
-    stbi_write_png("output.png", width, height, 3, framebuffer, width * 3);
-    
-    SDLimg(framebuffer, height, width);
+    if (argv[4] == NULL) {SDLimg(framebuffer, height, width); return 0;}
+    if (argv[5] == NULL) {argv[5] = "output.png";}
+    if (strcmp(argv[4], "--out") == 0) {stbi_write_png(argv[5], width, height, 3, framebuffer, width * 3); SDLimg(framebuffer, height, width);}
 
     return 0;
 }

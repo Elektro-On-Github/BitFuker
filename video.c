@@ -44,9 +44,9 @@ int video(char *argv[]) {
     printf("INPUT: %dx%d @ %.3f FPS\n", width, height, input_fps);
 
     // OUTPUT: parametri da passare via argv
-    int out_width = 1920;
-    int out_height = 1080;
-    double out_fps = 60;
+    int out_width = 0;
+    int out_height = 0;
+    double out_fps = 0;
 
     if (out_width <= 0 || out_height <= 0 || out_fps <= 0) {
         out_width = width;
@@ -56,7 +56,7 @@ int video(char *argv[]) {
 
     double MBpersecond = (double)out_width * out_height * out_fps * 3.0 / (1024.0 * 1024.0);
     printf("MB per second: %.1f\n", MBpersecond);
-    printf("INPUT: %dx%d @ %.3f FPS\n", out_width, out_height, out_fps);
+    printf("OUTPUT: %dx%d @ %.3f FPS\n", out_width, out_height, out_fps);
     
     // Framebuffer RGB24 con i param di out custom
     // size_t si usa per le dimensioni
@@ -70,7 +70,7 @@ int video(char *argv[]) {
     if (!framebuffer) {return 1;}
 
     // ffmpeg: fa decode con param custom
-    snprintf(command, sizeof(command), "ffmpeg -v error -i \"%s\" -an -vf \"scale=%d:%d,fps=%.2f\" -f rawvideo -pix_fmt rgb24 pipe:1", input, out_width, out_height, out_fps);
+    snprintf(command, sizeof(command), "ffmpeg -v error -threads 0 -hwaccel auto -i \"%s\" -an -vf \"scale=%d:%d,fps=%.2f\" -f rawvideo -pix_fmt rgb24 pipe:1", input, out_width, out_height, out_fps);
     // apre come comando
     FILE *decoder = popen(command, "r");
     // se decoder = NULL fanculo al framebuffer :)
