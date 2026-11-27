@@ -1,7 +1,8 @@
 #define _POSIX_C_SOURCE 200809L
 #include <stdio.h>
 #include <stdlib.h>
-
+#include "FXs/imgFX.h"
+#include <string.h>
 
 int video(char *argv[]) {
 
@@ -86,12 +87,23 @@ int video(char *argv[]) {
         return 1;
     }
 
+    if (strcmp(argv[3], "--vertical-line") == 0) {vline(framebuffer, dimFB, width);}
+    else if (strcmp(argv[3], "--xor") == 0) {xorfx(framebuffer, dimFB);}
+    else if (strcmp(argv[3], "--saturate") == 0) {saturate(framebuffer, dimFB);}
+    else if (strcmp(argv[3], "--bug") == 0) {bug(framebuffer, dimFB);}
+    else if (strcmp(argv[3], "--nintendo-3ds") == 0) {nintendo3ds_fx(framebuffer, dimFB);}
+    else if (strcmp(argv[3], "--soft-ghost") == 0) {soft_ghostfx(framebuffer, dimFB);}
+    else if (strcmp(argv[3], "--hard-ghost") == 0) {hard_ghostfx(framebuffer, dimFB);}
+    else if (strcmp(argv[3], "--granuly") == 0) {granuly(framebuffer, dimFB);}
+    else if (strcmp(argv[3], "--blacknoise") == 0) {blacknoise(framebuffer, dimFB);}
+    else if (strcmp(argv[3], "--huge-distortion") == 0) {hugedistortion(framebuffer, dimFB);}
+
     // applica fx frame per frame
     // fread legge i byte della pipe di ffmpeg e li copia dentro il framebuffer
     // fread(destinazione, dimensione_elemento, numero_elementi, sorgente)
     while (fread(framebuffer, 1, dimFB, decoder) == dimFB) {
 
-        // fx_fun(framebuffer, dimFB);
+        // fx(framebuffer, dimFB);
 
         if (fwrite(framebuffer, 1, dimFB, player) != dimFB) {break;}
     }
