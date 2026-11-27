@@ -4,7 +4,7 @@
 
 int main(void) {
 
-    char *input = "/home/elektrowindows/video-240fps.mp4";
+    char *input = "/home/elektrowindows/idk.mp4";
 
     // char buf dove stanno i comandi
     char command[4096];
@@ -42,10 +42,17 @@ int main(void) {
     // OUTPUT: parametri da passare via argv
     int out_width = 1920;
     int out_height = 1080;
-    int out_fps = 240;
+    double out_fps = 60;
+
+    if (out_width <= 0 || out_height <= 0 || out_fps <= 0) {
+        out_width = width;
+        out_height = height;
+        out_fps = input_fps;
+    }
 
     double MBpersecond = (double)out_width * out_height * out_fps * 3.0 / (1024.0 * 1024.0);
     printf("MB per second: %.1f\n", MBpersecond);
+    printf("INPUT: %dx%d @ %.3f FPS\n", out_width, out_height, out_fps);
     
     // Framebuffer RGB24 con i param di out custom
     // size_t si usa per le dimensioni
@@ -59,14 +66,14 @@ int main(void) {
     if (!framebuffer) {return 1;}
 
     // ffmpeg: fa decode con param custom
-    snprintf(command, sizeof(command), "ffmpeg -v error -i \"%s\" -an -vf \"scale=%d:%d,fps=%d\" -f rawvideo -pix_fmt rgb24 pipe:1", input, out_width, out_height, out_fps);
+    snprintf(command, sizeof(command), "ffmpeg -v error -i \"%s\" -an -vf \"scale=%d:%d,fps=%.2f\" -f rawvideo -pix_fmt rgb24 pipe:1", input, out_width, out_height, out_fps);
     // apre come comando
     FILE *decoder = popen(command, "r");
     // se decoder = NULL fanculo al framebuffer :)
     if (!decoder) {free(framebuffer); return 1;}
 
     // ffplay: riproduzione della roba raw in rgb24 con i parametri custom di prima
-    snprintf(command, sizeof(command), "ffplay -v error -f rawvideo -pixel_format rgb24 -video_size %dx%d -framerate %d pipe:0", out_width, out_height, out_fps);
+    snprintf(command, sizeof(command), "ffplay -v error -f rawvideo -pixel_format rgb24 -video_size %dx%d -framerate %.2f pipe:0", out_width, out_height, out_fps);
 
     // apre comando con scrittura, apre una pipe in scrittura verso stdin di ffplay
     FILE *player = popen(command, "w");
