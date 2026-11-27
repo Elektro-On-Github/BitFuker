@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 
-int video(int argc, char *argv[]) {
+int video(char *argv[]) {
 
     char *input = argv[2];
 

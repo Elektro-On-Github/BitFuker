@@ -1,6 +1,6 @@
 #ifndef IMG_H
 #define IMG_H
 
-int img(int argc, char *argv[]);
+int img(char *argv[]);
 
 #endif

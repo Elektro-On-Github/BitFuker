@@ -13,13 +13,12 @@
 
 // argc = argument count
 // argv = argument vector (argomenti passati al programma sotto forma di array di stringhe)
-int img(int argc, char *argv[]) {
+int img(char *argv[]) {
     srand(time(NULL));
     // vedi sempre qui se ti serve
     int width, height;
 
     // param di base
-    if (argc < 3) {help();return 0;} // campo ristretto per i param. avoidiamo roba indefinita
     char *IMGPath = argv[2];
 
     // crea un framebuffer che contiene i pixel raw di input.png
