@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int main() {
+int video(int argc, char *argv[]) {
 
     char *input = "/home/elektrowindows/idk.mp4";
 
