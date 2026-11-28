@@ -49,6 +49,7 @@ int img(char *argv[]) {
     else if (strcmp(argv[3], "--blacknoise") == 0) {blacknoise(framebuffer, dimFB, width);}
     else if (strcmp(argv[3], "--huge-distortion") == 0) {hugedistortion(framebuffer, dimFB, width);}
     else if (strcmp(argv[3], "--CRT-glitch") == 0) {CRTglitch(framebuffer, dimFB, width);}
+    else if (strcmp(argv[3], "--nofx") == 0) {nofx(framebuffer, dimFB, width);}
     else {help(); return 0;}
 
     if (argv[4] == NULL) {SDLimg(framebuffer, height, width); return 0;}

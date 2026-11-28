@@ -1,9 +1,10 @@
 #define _POSIX_C_SOURCE 200809L
 #include <stdio.h>
 #include <stdlib.h>
-#include "FXs/imgFX.h"
 #include <string.h>
+#include <signal.h>
 
+#include "FXs/imgFX.h"
 #include "help/help.h"
 
 int video(char *argv[]) {
@@ -109,6 +110,7 @@ int video(char *argv[]) {
     else if (strcmp(argv[3], "--blacknoise") == 0) {fx = blacknoise;}
     else if (strcmp(argv[3], "--huge-distortion") == 0) {fx = hugedistortion;}
     else if (strcmp(argv[3], "--CRT-glitch") == 0) {fx = CRTglitch;}
+    else if (strcmp(argv[3], "--nofx") == 0) {fx = nofx;}
     else {help(); return 0;}
 
     if (fx == NULL) {printf("fx pointer = NULL"); return 1;}
@@ -117,14 +119,14 @@ int video(char *argv[]) {
     // fread(destinazione, dimensione_elemento, numero_elementi, sorgente)
     while (fread(framebuffer, 1, dimFB, decoder) == dimFB) {
 
-        //fx(framebuffer, dimFB, width);
+        fx(framebuffer, dimFB, width);
 
         if (fwrite(framebuffer, 1, dimFB, player) != dimFB) {break;}
     }
 
     // chiude tutto
-    pclose(decoder);
     pclose(player);
+    pclose(decoder);
     free(framebuffer);
 
     return 0;

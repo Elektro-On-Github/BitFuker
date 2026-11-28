@@ -104,3 +104,7 @@ void CRTglitch(unsigned char *framebuffer, int dimFB, int width) {
         framebuffer[i] = framebuffer[i+kounter] - framebuffer[i+10];
     }
 }
+
+// questa func non fa un cazzo.
+// se non vuoi applicare effetti usala
+void nofx(unsigned char *framebuffer, int dimFB, int width) {}

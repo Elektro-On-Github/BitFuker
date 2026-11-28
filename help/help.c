@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 void help() {
-    printf("Usage: BitFuker <img_path> <effect>\n");
+    printf("Usage: bitfuker --type --file-path --fx\n");
     printf("Effects:\n");
     printf("  --vertical-line     Genera linee verticali con byte casuali\n");
     printf("  --xor               Applica l'operazione XOR ai pixel\n");

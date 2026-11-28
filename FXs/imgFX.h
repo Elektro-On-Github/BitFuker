@@ -12,5 +12,6 @@ void granuly(unsigned char *framebuffer, int dimFB, int width);
 void blacknoise(unsigned char *framebuffer, int dimFB, int width);
 void hugedistortion(unsigned char *framebuffer, int dimFB, int width);
 void CRTglitch(unsigned char *framebuffer, int dimFB, int width);
+void nofx(unsigned char *framebuffer, int dimFB, int width);
 
 #endif
