@@ -54,6 +54,7 @@ int video(char *argv[]) {
     if (argv[5] != NULL) {out_height = atoi(argv[5]);}
     if (argv[6] != NULL) {out_fps = atof(argv[6]);}
 
+    // check
     if (out_width <= 0 || out_height <= 0 || out_fps <= 0) {
         out_width = width;
         out_height = height;
