@@ -7,11 +7,11 @@ CPPFLAGS += -I$(SDL3_SOURCE_DIR)/include
 CFLAGS ?= -O3 -Wall
 
 ## strong optimization
-CFLAGS += -march=native -mtune=native -flto
+CFLAGS += -march=native -mtune=native -flto=auto
 CFLAGS += -std=c23
 
 #debug stuff
-CFLAGS += -fopt-info-vec-optimized
+#CFLAGS += -fopt-info-vec-optimized -fopt-info-vec-missed
 
 # sanitizer for debugging and mem leaks
 #CFLAGS += -Wall -Wextra -g -O1 -fsanitize=address -fno-omit-frame-pointer -std=c11
@@ -22,6 +22,8 @@ LDLIBS += -lavformat -lavcodec -lavutil -lswscale
 
 SDL3_LIBRARY := $(SDL3_BUILD_DIR)/libSDL3.so
 SDL3_CONFIG_STAMP := $(SDL3_BUILD_DIR)/.configured
+
+SOURCES = main.c video.c img.c FXs/imgFX.c help/help.c SDLimg.c
 
 .PHONY: all clean
 
@@ -37,9 +39,9 @@ $(SDL3_CONFIG_STAMP):
 $(SDL3_LIBRARY): $(SDL3_CONFIG_STAMP)
 	cmake --build "$(SDL3_BUILD_DIR)" --target SDL3-shared --parallel
 
-$(TARGET): main.c $(SDL3_LIBRARY)
+$(TARGET): $(SOURCES) $(SDL3_LIBRARY)
 	mkdir -p "$(dir $@)"
-	$(CC) $(CPPFLAGS) $(CFLAGS) main.c video.c img.c FXs/imgFX.c help/help.c SDLimg.c $(LDFLAGS) $(LDLIBS) -o $@
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(SOURCES) $(LDFLAGS) $(LDLIBS) -o $@
 
 clean:
 	rm -f "$(TARGET)"
