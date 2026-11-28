@@ -38,7 +38,7 @@ int img(char *argv[]) {
     //printf("%d", width);
 
     //param
-    if (strcmp(argv[3], "--vertical-line") == 0) {vline(framebuffer, dimFB, width);}
+    if (strcmp(argv[3], "--horizontal-line") == 0) {hline(framebuffer, dimFB, width);}
     else if (strcmp(argv[3], "--xor") == 0) {xorfx(framebuffer, dimFB, width);}
     else if (strcmp(argv[3], "--saturate") == 0) {saturate(framebuffer, dimFB, width);}
     else if (strcmp(argv[3], "--bug") == 0) {bug(framebuffer, dimFB, width);}

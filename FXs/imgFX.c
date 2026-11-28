@@ -1,13 +1,17 @@
 #include <stdlib.h>
 
-void vline(unsigned char *framebuffer, int dimFB, int width) {
-    int i, x;
-    for (i = 0; i < dimFB; i = i + width * 3) {
-        int randomnum = (rand() % width * 3);
-        for (x = 0; x < width - randomnum; x++) {
-            framebuffer[randomnum + i + x + 0] = rand() % 255;
-            framebuffer[randomnum + i + x + 1] = rand() % 255;
-            framebuffer[randomnum + i + x + 2] = rand() % 255;
+void hline(unsigned char *framebuffer, int dimFB, int width) {
+    int height = dimFB / (width * 3);
+
+    for (int n = 0; n < 30; n++) {
+        int y = rand() % height;
+
+        for (int x = 0; x < width; x++) {
+            int pos = (y * width + x) * 3;
+
+            framebuffer[pos + 0] = rand() % 256;
+            framebuffer[pos + 1] = rand() % 256;
+            framebuffer[pos + 2] = rand() % 256;
         }
     }
 }
@@ -93,15 +97,15 @@ void hugedistortion(unsigned char *framebuffer, int dimFB, int width) {
     int i;
     int kounter = 1;
     for (i = 0; i < (dimFB - (kounter + 1)); i++) {
-        framebuffer[i] = framebuffer[i+kounter] - framebuffer[i];
+        framebuffer[i] = framebuffer[i+kounter] - framebuffer[i+15];
     }
 }
 
 void CRTglitch(unsigned char *framebuffer, int dimFB, int width) {
     int i;
-    int kounter = 1;
+    int kounter = 42;
     for (i = 0; i < (dimFB - (kounter + 1)); i ++) {
-        framebuffer[i] = framebuffer[i+kounter] - framebuffer[i+10];
+        framebuffer[i] = framebuffer[i] - framebuffer[i+kounter];
     }
 }
 

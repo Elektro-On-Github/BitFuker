@@ -4,7 +4,7 @@
 void help() {
     printf("Usage: bitfuker --type --file-path --fx\n");
     printf("Effects:\n");
-    printf("  --vertical-line     Genera linee verticali con byte casuali\n");
+    printf("  --horizontal-line     Genera linee verticali con byte casuali\n");
     printf("  --xor               Applica l'operazione XOR ai pixel\n");
     printf("  --saturate          Overflow controllato con i valori dei pixel\n");
     printf("  --bug               Non è un bug, è una feature!\n");

@@ -51,9 +51,11 @@ int video(char *argv[]) {
 
     // atoi(); per gli int
     // atof(); per i double
-    if (argv[4] != NULL) {out_width = atoi(argv[4]);}
-    if (argv[5] != NULL) {out_height = atoi(argv[5]);}
-    if (argv[6] != NULL) {out_fps = atof(argv[6]);}
+    if (argv[4] != NULL && strcmp(argv[4], "--out") == 0) {
+        if (argv[5] != NULL) {out_width = atoi(argv[5]);}
+        if (argv[6] != NULL) {out_height = atoi(argv[6]);}
+        if (argv[7] != NULL) {out_fps = atof(argv[7]);}
+    }
 
     // check
     if (out_width <= 0 || out_height <= 0 || out_fps <= 0) {
@@ -99,7 +101,7 @@ int video(char *argv[]) {
 
     void (*fx)(unsigned char *framebuffer, int dimFB, int width) = NULL;
 
-    if (strcmp(argv[3], "--vertical-line") == 0) {fx = vline;}
+    if (strcmp(argv[3], "--horizontal-line") == 0) {fx = hline;}
     else if (strcmp(argv[3], "--xor") == 0) {fx = xorfx;}
     else if (strcmp(argv[3], "--saturate") == 0) {fx = saturate;}
     else if (strcmp(argv[3], "--bug") == 0) {fx = bug;}

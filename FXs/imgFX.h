@@ -1,7 +1,7 @@
 #ifndef IMGFX_H
 #define IMGFX_H
 
-void vline(unsigned char *framebuffer, int dimFB, int width);
+void hline(unsigned char *framebuffer, int dimFB, int width);
 void xorfx(unsigned char *framebuffer, int dimFB, int width);
 void saturate(unsigned char *framebuffer, int dimFB, int width);
 void bug(unsigned char *framebuffer, int dimFB, int width);
