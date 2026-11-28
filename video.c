@@ -48,6 +48,12 @@ int video(char *argv[]) {
     int out_height = 0;
     double out_fps = 0;
 
+    // atoi(); per gli int
+    // atof(); per i double
+    if (argv[4] != NULL) {out_width = atoi(argv[4]);}
+    if (argv[5] != NULL) {out_height = atoi(argv[5]);}
+    if (argv[6] != NULL) {out_fps = atof(argv[6]);}
+
     if (out_width <= 0 || out_height <= 0 || out_fps <= 0) {
         out_width = width;
         out_height = height;
@@ -110,7 +116,7 @@ int video(char *argv[]) {
     // fread(destinazione, dimensione_elemento, numero_elementi, sorgente)
     while (fread(framebuffer, 1, dimFB, decoder) == dimFB) {
 
-        fx(framebuffer, dimFB, width);
+        //fx(framebuffer, dimFB, width);
 
         if (fwrite(framebuffer, 1, dimFB, player) != dimFB) {break;}
     }
