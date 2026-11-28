@@ -4,8 +4,14 @@ SDL3_BUILD_DIR ?= build/sdl3
 TARGET ?= build/framebuffer
 
 CPPFLAGS += -I$(SDL3_SOURCE_DIR)/include
-CFLAGS ?= -O3 -Wall -Wextra
+CFLAGS ?= -O3 -Wall
+
+## strong optimization
+CFLAGS += -march=native -mtune=native -flto
 CFLAGS += -std=c23
+
+#debug stuff
+CFLAGS += -fopt-info-vec-optimized
 
 # sanitizer for debugging and mem leaks
 #CFLAGS += -Wall -Wextra -g -O1 -fsanitize=address -fno-omit-frame-pointer -std=c11

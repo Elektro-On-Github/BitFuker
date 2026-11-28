@@ -8,6 +8,4 @@ int main(int argc, char *argv[]) {
     // argv[0] == ./bitfuker
     if (strcmp(argv[1], "--img") == 0) {img(argv);} 
     if (strcmp(argv[1], "--vid") == 0) {video(argv);}
-    else {help();}
-    
 }

@@ -55,5 +55,9 @@ int img(char *argv[]) {
     if (argv[5] == NULL) {argv[5] = "output.png";}
     if (strcmp(argv[4], "--out") == 0) {stbi_write_png(argv[5], width, height, 3, framebuffer, width * 3); SDLimg(framebuffer, height, width);}
 
+    // qui c'e' un problemino.
+    // se l'utente inserisce un path inesistente il programma lo accetta lo stesso
+    // devo fixare sta roba
+
     return 0;
 }
